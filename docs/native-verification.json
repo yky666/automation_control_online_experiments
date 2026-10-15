@@ -1,0 +1,106 @@
+[
+  {
+    "lab": 1,
+    "task": "feedback",
+    "mode": "matlab",
+    "max_error": 2.1649348980190553e-15,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "lab": 1,
+    "task": "residue1",
+    "mode": "matlab",
+    "max_error": 0,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "lab": 2,
+    "task": "inertia",
+    "mode": "matlab",
+    "max_error": 1.1102230246251565e-15,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "lab": 3,
+    "task": "second",
+    "mode": "matlab",
+    "max_error": 6.661338147750939e-15,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "lab": 4,
+    "task": "stability1",
+    "mode": "matlab",
+    "max_error": 1.8762769116165146e-14,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "lab": 5,
+    "task": "frequency_inertia",
+    "mode": "matlab",
+    "max_error": 1.4155343563970746e-15,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "lab": 6,
+    "task": "lead1",
+    "mode": "matlab",
+    "max_error": 4.218847493575595e-15,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "lab": 6,
+    "task": "lead2",
+    "mode": "matlab",
+    "max_error": 1.609823385706477e-14,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "lab": 2,
+    "task": "p",
+    "mode": "simulink",
+    "max_error": 0.0,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "lab": 2,
+    "task": "inertia",
+    "mode": "simulink",
+    "max_error": 4.3520742565306136e-14,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "lab": 2,
+    "task": "integrator",
+    "mode": "simulink",
+    "max_error": 8.739675649849232e-13,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "lab": 2,
+    "task": "d",
+    "mode": "simulink",
+    "max_error": 4.8226353133173916e-08,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "lab": 2,
+    "task": "pi",
+    "mode": "simulink",
+    "max_error": 8.739675649849232e-13,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "lab": 2,
+    "task": "pd",
+    "mode": "simulink",
+    "max_error": 4.8226352689084706e-08,
+    "version": "24.2.0.2712019 (R2024b)"
+  },
+  {
+    "mode": "code",
+    "images": [
+      "figure_1.png"
+    ]
+  }
+]

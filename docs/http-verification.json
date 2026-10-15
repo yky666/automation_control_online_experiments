@@ -1,0 +1,54 @@
+[
+  {
+    "check": "html and built static assets",
+    "status": "passed"
+  },
+  {
+    "check": "all 51 original files downloadable",
+    "status": "passed"
+  },
+  {
+    "check": "matlab HTTP endpoint",
+    "run_id": "b090524b0359",
+    "status": "passed",
+    "metrics": {
+      "stability": "stable",
+      "steady_state": 1,
+      "overshoot": 17.20347751606659,
+      "settling_time": 0.8923304274976841,
+      "rise_time": 0.13256309125853905,
+      "peak_time": 0.30333333333333334,
+      "observed_end_value": 0.9999998839336308,
+      "settling_threshold": 0.02,
+      "ramp_error": 0.1
+    }
+  },
+  {
+    "check": "simulink HTTP endpoint",
+    "run_id": "29fe999655c6",
+    "status": "passed",
+    "metrics": {
+      "stability": "stable",
+      "steady_state": 1,
+      "overshoot": 17.203477517618794,
+      "settling_time": 0.892330427542831,
+      "rise_time": 0.1325630912060566,
+      "peak_time": 0.30333333333333334,
+      "observed_end_value": 0.9999998839336343,
+      "settling_threshold": 0.02,
+      "ramp_error": 0.1
+    }
+  },
+  {
+    "check": "edited MATLAB code HTTP endpoint and actual figure",
+    "status": "passed"
+  },
+  {
+    "check": "downloadable SLX runs with embedded input in a fresh MATLAB workspace",
+    "status": "passed"
+  },
+  {
+    "check": "combined offline HTML and reproducibility ZIP",
+    "status": "passed"
+  }
+]

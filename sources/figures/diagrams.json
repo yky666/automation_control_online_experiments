@@ -1,0 +1,62 @@
+{
+  "2:p": {
+    "url": "/sources/figures/lab2-p.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "2:inertia": {
+    "url": "/sources/figures/lab2-inertia.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "2:integrator": {
+    "url": "/sources/figures/lab2-integrator.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "2:d": {
+    "url": "/sources/figures/lab2-d.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "2:pi": {
+    "url": "/sources/figures/lab2-pi.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "2:pd": {
+    "url": "/sources/figures/lab2-pd.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "3:all": {
+    "url": "/sources/figures/lab3-all.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "4:all": {
+    "url": "/sources/figures/lab4-all.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "5:bandwidth": {
+    "url": "/sources/figures/lab5-bandwidth.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "5:frequency_inertia": {
+    "url": "/sources/figures/lab5-frequency_inertia.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "5:frequency_second": {
+    "url": "/sources/figures/lab5-frequency_second.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "6:lead1": {
+    "url": "/sources/figures/lab6-lead1.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "6:lead2": {
+    "url": "/sources/figures/lab6-lead2.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "6:lead_example1": {
+    "url": "/sources/figures/lab6-lead_example1.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  },
+  "6:lead_example2": {
+    "url": "/sources/figures/lab6-lead_example2.png",
+    "caption": "课程原理图（原始接线与符号，按实际模型核对）"
+  }
+}

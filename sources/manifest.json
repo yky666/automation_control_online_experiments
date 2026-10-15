@@ -1,0 +1,262 @@
+[
+  {
+    "id": 1,
+    "files": [
+      {
+        "name": "task1_1.m",
+        "url": "/sources/lab1/task1_1.m",
+        "type": "m"
+      },
+      {
+        "name": "task1_2.m",
+        "url": "/sources/lab1/task1_2.m",
+        "type": "m"
+      },
+      {
+        "name": "task2_1.m",
+        "url": "/sources/lab1/task2_1.m",
+        "type": "m"
+      },
+      {
+        "name": "task2_2.m",
+        "url": "/sources/lab1/task2_2.m",
+        "type": "m"
+      },
+      {
+        "name": "task3_1.m",
+        "url": "/sources/lab1/task3_1.m",
+        "type": "m"
+      },
+      {
+        "name": "task3_2.m",
+        "url": "/sources/lab1/task3_2.m",
+        "type": "m"
+      },
+      {
+        "name": "task4.m",
+        "url": "/sources/lab1/task4.m",
+        "type": "m"
+      },
+      {
+        "name": "task5_expand.m",
+        "url": "/sources/lab1/task5_expand.m",
+        "type": "m"
+      },
+      {
+        "name": "simulink_example.slx",
+        "url": "/sources/lab1/simulink_example.slx",
+        "type": "slx"
+      },
+      {
+        "name": "实验一：Matlab简介、传递函数及数学模型求取.pptx",
+        "url": "/sources/lab1/实验一：Matlab简介、传递函数及数学模型求取.pptx",
+        "type": "pptx"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "files": [
+      {
+        "name": "task1.slx",
+        "url": "/sources/lab2/task1.slx",
+        "type": "slx"
+      },
+      {
+        "name": "task2.slx",
+        "url": "/sources/lab2/task2.slx",
+        "type": "slx"
+      },
+      {
+        "name": "task3.slx",
+        "url": "/sources/lab2/task3.slx",
+        "type": "slx"
+      },
+      {
+        "name": "task4.slx",
+        "url": "/sources/lab2/task4.slx",
+        "type": "slx"
+      },
+      {
+        "name": "task5.slx",
+        "url": "/sources/lab2/task5.slx",
+        "type": "slx"
+      },
+      {
+        "name": "task6.slx",
+        "url": "/sources/lab2/task6.slx",
+        "type": "slx"
+      },
+      {
+        "name": "实验二：基于Matlab的典型环节模拟.pdf",
+        "url": "/sources/lab2/实验二：基于Matlab的典型环节模拟.pdf",
+        "type": "pdf"
+      },
+      {
+        "name": "实验二：基于Matlab的典型环节模拟.pptx",
+        "url": "/sources/lab2/实验二：基于Matlab的典型环节模拟.pptx",
+        "type": "pptx"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "files": [
+      {
+        "name": "example1.m",
+        "url": "/sources/lab3/example1.m",
+        "type": "m"
+      },
+      {
+        "name": "example2.m",
+        "url": "/sources/lab3/example2.m",
+        "type": "m"
+      },
+      {
+        "name": "example3.m",
+        "url": "/sources/lab3/example3.m",
+        "type": "m"
+      },
+      {
+        "name": "example4.m",
+        "url": "/sources/lab3/example4.m",
+        "type": "m"
+      },
+      {
+        "name": "exercise.m",
+        "url": "/sources/lab3/exercise.m",
+        "type": "m"
+      },
+      {
+        "name": "task1.m",
+        "url": "/sources/lab3/task1.m",
+        "type": "m"
+      },
+      {
+        "name": "task2.m",
+        "url": "/sources/lab3/task2.m",
+        "type": "m"
+      },
+      {
+        "name": "task3.m",
+        "url": "/sources/lab3/task3.m",
+        "type": "m"
+      },
+      {
+        "name": "task4.m",
+        "url": "/sources/lab3/task4.m",
+        "type": "m"
+      },
+      {
+        "name": "实验三：基于Matlab的控制系统时域性能指标分析与设计20260922.pdf",
+        "url": "/sources/lab3/实验三：基于Matlab的控制系统时域性能指标分析与设计20260922.pdf",
+        "type": "pdf"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "files": [
+      {
+        "name": "make_report_figures.m",
+        "url": "/sources/lab4/make_report_figures.m",
+        "type": "m"
+      },
+      {
+        "name": "make_stabilityfigs.m",
+        "url": "/sources/lab4/make_stabilityfigs.m",
+        "type": "m"
+      },
+      {
+        "name": "make_task2fig.m",
+        "url": "/sources/lab4/make_task2fig.m",
+        "type": "m"
+      },
+      {
+        "name": "make_task3fig.m",
+        "url": "/sources/lab4/make_task3fig.m",
+        "type": "m"
+      },
+      {
+        "name": "task1.m",
+        "url": "/sources/lab4/task1.m",
+        "type": "m"
+      },
+      {
+        "name": "task2.m",
+        "url": "/sources/lab4/task2.m",
+        "type": "m"
+      },
+      {
+        "name": "task3.m",
+        "url": "/sources/lab4/task3.m",
+        "type": "m"
+      },
+      {
+        "name": "task3_augmentation.m",
+        "url": "/sources/lab4/task3_augmentation.m",
+        "type": "m"
+      },
+      {
+        "name": "实验四：基于Matlab的控制系统稳定性分析PPT_20260929204057.pdf",
+        "url": "/sources/lab4/实验四：基于Matlab的控制系统稳定性分析PPT_20260929204057.pdf",
+        "type": "pdf"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "files": [
+      {
+        "name": "task1.m",
+        "url": "/sources/lab5/task1.m",
+        "type": "m"
+      },
+      {
+        "name": "task2.m",
+        "url": "/sources/lab5/task2.m",
+        "type": "m"
+      },
+      {
+        "name": "task3.m",
+        "url": "/sources/lab5/task3.m",
+        "type": "m"
+      },
+      {
+        "name": "实验五：基于Matlab的控制系统频率特性验证PPT——20261010_20261009093319.pdf",
+        "url": "/sources/lab5/实验五：基于Matlab的控制系统频率特性验证PPT——20261010_20261009093319.pdf",
+        "type": "pdf"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "files": [
+      {
+        "name": "example1.m",
+        "url": "/sources/lab6/example1.m",
+        "type": "m"
+      },
+      {
+        "name": "example2.m",
+        "url": "/sources/lab6/example2.m",
+        "type": "m"
+      },
+      {
+        "name": "task1.m",
+        "url": "/sources/lab6/task1.m",
+        "type": "m"
+      },
+      {
+        "name": "task2.m",
+        "url": "/sources/lab6/task2.m",
+        "type": "m"
+      },
+      {
+        "name": "实验六-基于Matlab的频域法串联超前校正PPT_20261014084533.pdf",
+        "url": "/sources/lab6/实验六-基于Matlab的频域法串联超前校正PPT_20261014084533.pdf",
+        "type": "pdf"
+      }
+    ]
+  }
+]

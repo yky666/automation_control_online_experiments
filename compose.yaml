@@ -1,0 +1,15 @@
+services:
+  control-lab:
+    build: .
+    ports:
+      - "8765:8765"
+    volumes:
+      - control-lab-data:/app/runtime
+    environment:
+      CONTROL_LAB_ENABLE_LOCAL_MATLAB: "0"
+      CONTROL_LAB_SESSION_ISOLATION: "1"
+      CONTROL_LAB_MATLAB_URL: ${CONTROL_LAB_MATLAB_URL:-}
+      CONTROL_LAB_WORKER_TOKEN: ${CONTROL_LAB_WORKER_TOKEN:-}
+    restart: unless-stopped
+volumes:
+  control-lab-data:

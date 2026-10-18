@@ -89,8 +89,9 @@ def build_model(req):
         design={'alpha':alpha,'beta':1/alpha,'T':1/wp,'wz':wz,'wp':wp,'wm':wm,'stages':stages,'before_margins':m0,'controller_num':list(nc),'controller_den':list(dc),'Kv':(2*p['Kv']/2 if kind=='lead1' else K if kind=='lead2' else None)}
         if kind=='lead2':design['requirements']={'overshoot':p['MpReq'],'settling_time':p['tsReq'],'ramp_error':p['essReq']}
         if kind=='lead_example2':
-            design['requirements']={'overshoot':p['MpReq'],'settling_time':p['tsReq'],'ramp_error':p['essReq']}
+            design['Ka']=K
             design['ramp_error_theoretical']=0.
+            design['target_phase_margin']=p['targetPM']
         close=True
     else:
         n=task['num'];d=task['den']
@@ -191,6 +192,7 @@ def simulate_preview(model):
     if 'requirements' in design:
         checks={key:(metric.get(key) is not None and metric[key]<=limit+1e-8) for key,limit in design['requirements'].items()}
     if model['task_id']=='lead1':checks={'phase_margin':m['phase_margin'] is not None and m['phase_margin']>model['params']['targetPM'],'gain_margin_db':m['gain_margin_infinite'] or (m['gain_margin_db'] is not None and m['gain_margin_db']>10)}
+    if model['task_id']=='lead_example2':checks={'phase_margin':m['phase_margin'] is not None and m['phase_margin']>model['params']['targetPM']}
     result=dict(engine='scipy',engine_label='平台计算（免 MATLAB）',model=model,time=t.tolist(),input=u.tolist(),output=np.asarray(y).tolist(),bode=bode,metrics=metric,margins=m,poles=[[float(p.real),float(p.imag)] for p in roots(d)],zeros=[[float(p.real),float(p.imag)] for p in roots(n)],notes=notes,checks=checks,**extras)
     return result
 

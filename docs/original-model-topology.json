@@ -1,0 +1,664 @@
+[
+  {
+    "lab": 1,
+    "path": "sources/lab1/simulink_example.slx",
+    "systems": [
+      {
+        "path": "simulink/systems/system_root.xml",
+        "blocks": [
+          {
+            "name": "Gain",
+            "type": "Gain",
+            "sid": "1",
+            "parameters": {
+              "Gain": "2"
+            }
+          },
+          {
+            "name": "Integrator",
+            "type": "Integrator",
+            "sid": "2",
+            "parameters": {}
+          },
+          {
+            "name": "Scope",
+            "type": "Scope",
+            "sid": "3",
+            "parameters": {
+              "NumInputPorts": "1",
+              "Floating": "off"
+            }
+          },
+          {
+            "name": "Step",
+            "type": "Step",
+            "sid": "5",
+            "parameters": {
+              "SampleTime": "0"
+            }
+          },
+          {
+            "name": "Sum",
+            "type": "Sum",
+            "sid": "4",
+            "parameters": {
+              "Inputs": "|+-"
+            }
+          }
+        ],
+        "lines": [
+          "<Line>\n    <P Name=\"ZOrder\">2</P>\n    <P Name=\"Src\">5#out:1</P>\n    <P Name=\"Dst\">4#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">3</P>\n    <P Name=\"Src\">4#out:1</P>\n    <P Name=\"Dst\">2#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">4</P>\n    <P Name=\"Src\">2#out:1</P>\n    <P Name=\"Points\">[26, 0]</P>\n    <Branch>\n      <P Name=\"ZOrder\">9</P>\n      <P Name=\"Points\">[0, -75]</P>\n      <P Name=\"Dst\">3#in:1</P>\n    </Branch>\n    <Branch>\n      <P Name=\"ZOrder\">8</P>\n      <P Name=\"Dst\">1#in:1</P>\n    </Branch>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">5</P>\n    <P Name=\"Src\">1#out:1</P>\n    <P Name=\"Points\">[19, 0; 0, 39; -289, 0]</P>\n    <P Name=\"Dst\">4#in:2</P>\n  </Line>\n"
+        ]
+      }
+    ]
+  },
+  {
+    "lab": 2,
+    "path": "sources/lab2/task1.slx",
+    "systems": [
+      {
+        "path": "simulink/systems/system_root.xml",
+        "blocks": [
+          {
+            "name": "Gain",
+            "type": "Gain",
+            "sid": "1",
+            "parameters": {}
+          },
+          {
+            "name": "Gain1",
+            "type": "Gain",
+            "sid": "5",
+            "parameters": {
+              "Gain": "2"
+            }
+          },
+          {
+            "name": "Gain2",
+            "type": "Gain",
+            "sid": "6",
+            "parameters": {
+              "Gain": "5"
+            }
+          },
+          {
+            "name": "Gain3",
+            "type": "Gain",
+            "sid": "7",
+            "parameters": {
+              "Gain": "10"
+            }
+          },
+          {
+            "name": "Scope",
+            "type": "Scope",
+            "sid": "2",
+            "parameters": {
+              "NumInputPorts": "4",
+              "Floating": "off"
+            }
+          },
+          {
+            "name": "Step",
+            "type": "Step",
+            "sid": "3",
+            "parameters": {
+              "SampleTime": "0"
+            }
+          }
+        ],
+        "lines": [
+          "<Line>\n    <P Name=\"ZOrder\">1</P>\n    <P Name=\"Src\">3#out:1</P>\n    <P Name=\"Points\">[8, 0]</P>\n    <Branch>\n      <P Name=\"ZOrder\">7</P>\n      <P Name=\"Points\">[0, 40]</P>\n      <Branch>\n        <P Name=\"ZOrder\">9</P>\n        <P Name=\"Points\">[0, 40]</P>\n        <Branch>\n          <P Name=\"ZOrder\">11</P>\n          <P Name=\"Points\">[0, 40]</P>\n          <P Name=\"Dst\">7#in:1</P>\n        </Branch>\n        <Branch>\n          <P Name=\"ZOrder\">10</P>\n          <P Name=\"Dst\">6#in:1</P>\n        </Branch>\n      </Branch>\n      <Branch>\n        <P Name=\"ZOrder\">8</P>\n        <P Name=\"Dst\">5#in:1</P>\n      </Branch>\n    </Branch>\n    <Branch>\n      <P Name=\"ZOrder\">6</P>\n      <P Name=\"Dst\">1#in:1</P>\n    </Branch>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">2</P>\n    <P Name=\"Src\">1#out:1</P>\n    <P Name=\"Dst\">2#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">3</P>\n    <P Name=\"Src\">7#out:1</P>\n    <P Name=\"Dst\">2#in:4</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">4</P>\n    <P Name=\"Src\">6#out:1</P>\n    <P Name=\"Dst\">2#in:3</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">5</P>\n    <P Name=\"Src\">5#out:1</P>\n    <P Name=\"Dst\">2#in:2</P>\n  </Line>\n"
+        ]
+      }
+    ]
+  },
+  {
+    "lab": 2,
+    "path": "sources/lab2/task2.slx",
+    "systems": [
+      {
+        "path": "simulink/systems/system_root.xml",
+        "blocks": [
+          {
+            "name": "Scope",
+            "type": "Scope",
+            "sid": "2",
+            "parameters": {
+              "NumInputPorts": "4",
+              "Floating": "off"
+            }
+          },
+          {
+            "name": "Step",
+            "type": "Step",
+            "sid": "3",
+            "parameters": {
+              "SampleTime": "0"
+            }
+          },
+          {
+            "name": "Transfer Fcn",
+            "type": "TransferFcn",
+            "sid": "5",
+            "parameters": {
+              "Numerator": "[-1]",
+              "Denominator": "[0.01 1]"
+            }
+          },
+          {
+            "name": "Transfer Fcn1",
+            "type": "TransferFcn",
+            "sid": "6",
+            "parameters": {
+              "Numerator": "[-1]",
+              "Denominator": "[0.1 1]"
+            }
+          },
+          {
+            "name": "Transfer Fcn2",
+            "type": "TransferFcn",
+            "sid": "7",
+            "parameters": {
+              "Numerator": "[-1]",
+              "Denominator": "[1 1]"
+            }
+          },
+          {
+            "name": "Transfer Fcn3",
+            "type": "TransferFcn",
+            "sid": "8",
+            "parameters": {
+              "Numerator": "[-1]",
+              "Denominator": "[10 1]"
+            }
+          }
+        ],
+        "lines": [
+          "<Line>\n    <P Name=\"ZOrder\">3</P>\n    <P Name=\"Src\">3#out:1</P>\n    <P Name=\"Points\">[9, 0]</P>\n    <Branch>\n      <P Name=\"ZOrder\">6</P>\n      <P Name=\"Points\">[0, 45]</P>\n      <Branch>\n        <P Name=\"ZOrder\">10</P>\n        <P Name=\"Points\">[0, 45]</P>\n        <Branch>\n          <P Name=\"ZOrder\">13</P>\n          <P Name=\"Points\">[0, 45]</P>\n          <P Name=\"Dst\">8#in:1</P>\n        </Branch>\n        <Branch>\n          <P Name=\"ZOrder\">12</P>\n          <P Name=\"Dst\">7#in:1</P>\n        </Branch>\n      </Branch>\n      <Branch>\n        <P Name=\"ZOrder\">9</P>\n        <P Name=\"Dst\">6#in:1</P>\n      </Branch>\n    </Branch>\n    <Branch>\n      <P Name=\"ZOrder\">5</P>\n      <P Name=\"Dst\">5#in:1</P>\n    </Branch>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">4</P>\n    <P Name=\"Src\">5#out:1</P>\n    <P Name=\"Dst\">2#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">7</P>\n    <P Name=\"Src\">6#out:1</P>\n    <P Name=\"Dst\">2#in:2</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">8</P>\n    <P Name=\"Src\">7#out:1</P>\n    <P Name=\"Dst\">2#in:3</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">11</P>\n    <P Name=\"Src\">8#out:1</P>\n    <P Name=\"Dst\">2#in:4</P>\n  </Line>\n"
+        ]
+      }
+    ]
+  },
+  {
+    "lab": 2,
+    "path": "sources/lab2/task3.slx",
+    "systems": [
+      {
+        "path": "simulink/systems/system_root.xml",
+        "blocks": [
+          {
+            "name": "Scope",
+            "type": "Scope",
+            "sid": "2",
+            "parameters": {
+              "NumInputPorts": "4",
+              "Floating": "off"
+            }
+          },
+          {
+            "name": "Step",
+            "type": "Step",
+            "sid": "3",
+            "parameters": {
+              "SampleTime": "0"
+            }
+          },
+          {
+            "name": "Transfer Fcn",
+            "type": "TransferFcn",
+            "sid": "5",
+            "parameters": {
+              "Numerator": "[-1]",
+              "Denominator": "[0.01]"
+            }
+          },
+          {
+            "name": "Transfer Fcn1",
+            "type": "TransferFcn",
+            "sid": "6",
+            "parameters": {
+              "Numerator": "[-1]",
+              "Denominator": "[0.1]"
+            }
+          },
+          {
+            "name": "Transfer Fcn2",
+            "type": "TransferFcn",
+            "sid": "7",
+            "parameters": {
+              "Numerator": "[-1]",
+              "Denominator": "[1]"
+            }
+          },
+          {
+            "name": "Transfer Fcn3",
+            "type": "TransferFcn",
+            "sid": "8",
+            "parameters": {
+              "Numerator": "[-1]",
+              "Denominator": "[10]"
+            }
+          }
+        ],
+        "lines": [
+          "<Line>\n    <P Name=\"ZOrder\">3</P>\n    <P Name=\"Src\">3#out:1</P>\n    <P Name=\"Points\">[9, 0]</P>\n    <Branch>\n      <P Name=\"ZOrder\">6</P>\n      <P Name=\"Points\">[0, 45]</P>\n      <Branch>\n        <P Name=\"ZOrder\">10</P>\n        <P Name=\"Points\">[0, 45]</P>\n        <Branch>\n          <P Name=\"ZOrder\">13</P>\n          <P Name=\"Points\">[0, 45]</P>\n          <P Name=\"Dst\">8#in:1</P>\n        </Branch>\n        <Branch>\n          <P Name=\"ZOrder\">12</P>\n          <P Name=\"Dst\">7#in:1</P>\n        </Branch>\n      </Branch>\n      <Branch>\n        <P Name=\"ZOrder\">9</P>\n        <P Name=\"Dst\">6#in:1</P>\n      </Branch>\n    </Branch>\n    <Branch>\n      <P Name=\"ZOrder\">5</P>\n      <P Name=\"Dst\">5#in:1</P>\n    </Branch>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">4</P>\n    <P Name=\"Src\">5#out:1</P>\n    <P Name=\"Dst\">2#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">7</P>\n    <P Name=\"Src\">6#out:1</P>\n    <P Name=\"Dst\">2#in:2</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">8</P>\n    <P Name=\"Src\">7#out:1</P>\n    <P Name=\"Dst\">2#in:3</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">11</P>\n    <P Name=\"Src\">8#out:1</P>\n    <P Name=\"Dst\">2#in:4</P>\n  </Line>\n"
+        ]
+      }
+    ]
+  },
+  {
+    "lab": 2,
+    "path": "sources/lab2/task4.slx",
+    "systems": [
+      {
+        "path": "simulink/systems/system_root.xml",
+        "blocks": [
+          {
+            "name": "Derivative",
+            "type": "Derivative",
+            "sid": "13",
+            "parameters": {}
+          },
+          {
+            "name": "Derivative1",
+            "type": "Derivative",
+            "sid": "15",
+            "parameters": {}
+          },
+          {
+            "name": "Derivative2",
+            "type": "Derivative",
+            "sid": "17",
+            "parameters": {}
+          },
+          {
+            "name": "Derivative3",
+            "type": "Derivative",
+            "sid": "19",
+            "parameters": {}
+          },
+          {
+            "name": "Gain",
+            "type": "Gain",
+            "sid": "14",
+            "parameters": {
+              "Gain": "-0.01"
+            }
+          },
+          {
+            "name": "Gain1",
+            "type": "Gain",
+            "sid": "16",
+            "parameters": {
+              "Gain": "-0.1"
+            }
+          },
+          {
+            "name": "Gain2",
+            "type": "Gain",
+            "sid": "18",
+            "parameters": {
+              "Gain": "-1"
+            }
+          },
+          {
+            "name": "Gain3",
+            "type": "Gain",
+            "sid": "20",
+            "parameters": {
+              "Gain": "-10"
+            }
+          },
+          {
+            "name": "Scope",
+            "type": "Scope",
+            "sid": "2",
+            "parameters": {
+              "NumInputPorts": "4",
+              "Floating": "off"
+            }
+          },
+          {
+            "name": "Step",
+            "type": "Step",
+            "sid": "3",
+            "parameters": {
+              "SampleTime": "0"
+            }
+          }
+        ],
+        "lines": [
+          "<Line>\n    <P Name=\"ZOrder\">23</P>\n    <P Name=\"Src\">3#out:1</P>\n    <P Name=\"Points\">[5, 0]</P>\n    <Branch>\n      <P Name=\"ZOrder\">39</P>\n      <P Name=\"Points\">[0, 45]</P>\n      <Branch>\n        <P Name=\"ZOrder\">41</P>\n        <P Name=\"Points\">[0, 45]</P>\n        <Branch>\n          <P Name=\"ZOrder\">43</P>\n          <P Name=\"Points\">[0, 45]</P>\n          <P Name=\"Dst\">20#in:1</P>\n        </Branch>\n        <Branch>\n          <P Name=\"ZOrder\">42</P>\n          <P Name=\"Dst\">18#in:1</P>\n        </Branch>\n      </Branch>\n      <Branch>\n        <P Name=\"ZOrder\">40</P>\n        <P Name=\"Dst\">16#in:1</P>\n      </Branch>\n    </Branch>\n    <Branch>\n      <P Name=\"ZOrder\">38</P>\n      <P Name=\"Dst\">14#in:1</P>\n    </Branch>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">31</P>\n    <P Name=\"Src\">14#out:1</P>\n    <P Name=\"Dst\">13#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">33</P>\n    <P Name=\"Src\">16#out:1</P>\n    <P Name=\"Dst\">15#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">35</P>\n    <P Name=\"Src\">18#out:1</P>\n    <P Name=\"Dst\">17#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">37</P>\n    <P Name=\"Src\">20#out:1</P>\n    <P Name=\"Dst\">19#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">44</P>\n    <P Name=\"Src\">13#out:1</P>\n    <P Name=\"Dst\">2#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">45</P>\n    <P Name=\"Src\">15#out:1</P>\n    <P Name=\"Dst\">2#in:2</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">46</P>\n    <P Name=\"Src\">17#out:1</P>\n    <P Name=\"Dst\">2#in:3</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">47</P>\n    <P Name=\"Src\">19#out:1</P>\n    <P Name=\"Dst\">2#in:4</P>\n  </Line>\n"
+        ]
+      }
+    ]
+  },
+  {
+    "lab": 2,
+    "path": "sources/lab2/task5.slx",
+    "systems": [
+      {
+        "path": "simulink/systems/system_root.xml",
+        "blocks": [
+          {
+            "name": "Gain",
+            "type": "Gain",
+            "sid": "22",
+            "parameters": {
+              "Gain": "-1"
+            }
+          },
+          {
+            "name": "Gain1",
+            "type": "Gain",
+            "sid": "28",
+            "parameters": {
+              "Gain": "-1"
+            }
+          },
+          {
+            "name": "Gain2",
+            "type": "Gain",
+            "sid": "31",
+            "parameters": {
+              "Gain": "-1"
+            }
+          },
+          {
+            "name": "Gain3",
+            "type": "Gain",
+            "sid": "34",
+            "parameters": {
+              "Gain": "-1"
+            }
+          },
+          {
+            "name": "Scope",
+            "type": "Scope",
+            "sid": "2",
+            "parameters": {
+              "NumInputPorts": "4",
+              "Floating": "off"
+            }
+          },
+          {
+            "name": "Step",
+            "type": "Step",
+            "sid": "3",
+            "parameters": {
+              "SampleTime": "0"
+            }
+          },
+          {
+            "name": "Sum",
+            "type": "Sum",
+            "sid": "24",
+            "parameters": {
+              "Inputs": "|++"
+            }
+          },
+          {
+            "name": "Sum1",
+            "type": "Sum",
+            "sid": "30",
+            "parameters": {
+              "Inputs": "|++"
+            }
+          },
+          {
+            "name": "Sum2",
+            "type": "Sum",
+            "sid": "33",
+            "parameters": {
+              "Inputs": "|++"
+            }
+          },
+          {
+            "name": "Sum3",
+            "type": "Sum",
+            "sid": "36",
+            "parameters": {
+              "Inputs": "|++"
+            }
+          },
+          {
+            "name": "Transfer Fcn",
+            "type": "TransferFcn",
+            "sid": "37",
+            "parameters": {
+              "Denominator": "[0.01 0]"
+            }
+          },
+          {
+            "name": "Transfer Fcn1",
+            "type": "TransferFcn",
+            "sid": "38",
+            "parameters": {
+              "Denominator": "[0.1 0]"
+            }
+          },
+          {
+            "name": "Transfer Fcn2",
+            "type": "TransferFcn",
+            "sid": "39",
+            "parameters": {
+              "Denominator": "[1 0]"
+            }
+          },
+          {
+            "name": "Transfer Fcn3",
+            "type": "TransferFcn",
+            "sid": "40",
+            "parameters": {
+              "Denominator": "[10 0]"
+            }
+          }
+        ],
+        "lines": [
+          "<Line>\n    <P Name=\"ZOrder\">54</P>\n    <P Name=\"Src\">24#out:1</P>\n    <P Name=\"Dst\">22#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">57</P>\n    <P Name=\"Src\">22#out:1</P>\n    <P Name=\"Dst\">2#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">49</P>\n    <P Name=\"Src\">3#out:1</P>\n    <P Name=\"Points\">[5, 0]</P>\n    <Branch>\n      <P Name=\"ZOrder\">82</P>\n      <P Name=\"Points\">[0, 65]</P>\n      <Branch>\n        <P Name=\"ZOrder\">85</P>\n        <P Name=\"Points\">[0, 65]</P>\n        <Branch>\n          <P Name=\"ZOrder\">87</P>\n          <P Name=\"Points\">[0, 65; 15, 0]</P>\n          <Branch>\n            <P Name=\"ZOrder\">110</P>\n            <P Name=\"Points\">[0, 39; 100, 0]</P>\n            <P Name=\"Dst\">36#in:2</P>\n          </Branch>\n          <Branch>\n            <P Name=\"ZOrder\">109</P>\n            <P Name=\"Dst\">40#in:1</P>\n          </Branch>\n        </Branch>\n        <Branch>\n          <P Name=\"ZOrder\">86</P>\n          <P Name=\"Points\">[15, 0]</P>\n          <Branch>\n            <P Name=\"ZOrder\">105</P>\n            <P Name=\"Points\">[0, 33; 100, 0]</P>\n            <P Name=\"Dst\">33#in:2</P>\n          </Branch>\n          <Branch>\n            <P Name=\"ZOrder\">104</P>\n            <P Name=\"Dst\">39#in:1</P>\n          </Branch>\n        </Branch>\n      </Branch>\n      <Branch>\n        <P Name=\"ZOrder\">84</P>\n        <P Name=\"Points\">[15, 0]</P>\n        <Branch>\n          <P Name=\"ZOrder\">102</P>\n          <P Name=\"Points\">[0, 33; 100, 0]</P>\n          <P Name=\"Dst\">30#in:2</P>\n        </Branch>\n        <Branch>\n          <P Name=\"ZOrder\">101</P>\n          <P Name=\"Dst\">38#in:1</P>\n        </Branch>\n      </Branch>\n    </Branch>\n    <Branch>\n      <P Name=\"ZOrder\">81</P>\n      <P Name=\"Points\">[10, 0]</P>\n      <Branch>\n        <P Name=\"ZOrder\">98</P>\n        <P Name=\"Dst\">37#in:1</P>\n      </Branch>\n      <Branch>\n        <P Name=\"ZOrder\">97</P>\n        <P Name=\"Points\">[0, 39; 105, 0]</P>\n        <P Name=\"Dst\">24#in:2</P>\n      </Branch>\n    </Branch>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">67</P>\n    <P Name=\"Src\">30#out:1</P>\n    <P Name=\"Dst\">28#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">72</P>\n    <P Name=\"Src\">33#out:1</P>\n    <P Name=\"Dst\">31#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">77</P>\n    <P Name=\"Src\">36#out:1</P>\n    <P Name=\"Dst\">34#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">78</P>\n    <P Name=\"Src\">28#out:1</P>\n    <P Name=\"Dst\">2#in:2</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">79</P>\n    <P Name=\"Src\">31#out:1</P>\n    <P Name=\"Dst\">2#in:3</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">80</P>\n    <P Name=\"Src\">34#out:1</P>\n    <P Name=\"Dst\">2#in:4</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">96</P>\n    <P Name=\"Src\">37#out:1</P>\n    <P Name=\"Dst\">24#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">99</P>\n    <P Name=\"Src\">38#out:1</P>\n    <P Name=\"Dst\">30#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">106</P>\n    <P Name=\"Src\">39#out:1</P>\n    <P Name=\"Dst\">33#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">107</P>\n    <P Name=\"Src\">40#out:1</P>\n    <P Name=\"Dst\">36#in:1</P>\n  </Line>\n"
+        ]
+      }
+    ]
+  },
+  {
+    "lab": 2,
+    "path": "sources/lab2/task6.slx",
+    "systems": [
+      {
+        "path": "simulink/systems/system_root.xml",
+        "blocks": [
+          {
+            "name": "Derivative",
+            "type": "Derivative",
+            "sid": "42",
+            "parameters": {}
+          },
+          {
+            "name": "Derivative1",
+            "type": "Derivative",
+            "sid": "43",
+            "parameters": {}
+          },
+          {
+            "name": "Derivative2",
+            "type": "Derivative",
+            "sid": "47",
+            "parameters": {}
+          },
+          {
+            "name": "Derivative3",
+            "type": "Derivative",
+            "sid": "49",
+            "parameters": {}
+          },
+          {
+            "name": "Gain",
+            "type": "Gain",
+            "sid": "22",
+            "parameters": {
+              "Gain": "-1"
+            }
+          },
+          {
+            "name": "Gain1",
+            "type": "Gain",
+            "sid": "28",
+            "parameters": {
+              "Gain": "-1"
+            }
+          },
+          {
+            "name": "Gain2",
+            "type": "Gain",
+            "sid": "31",
+            "parameters": {
+              "Gain": "-1"
+            }
+          },
+          {
+            "name": "Gain3",
+            "type": "Gain",
+            "sid": "34",
+            "parameters": {
+              "Gain": "-1"
+            }
+          },
+          {
+            "name": "Gain4",
+            "type": "Gain",
+            "sid": "41",
+            "parameters": {
+              "Gain": "0.01"
+            }
+          },
+          {
+            "name": "Gain5",
+            "type": "Gain",
+            "sid": "44",
+            "parameters": {
+              "Gain": "0.1"
+            }
+          },
+          {
+            "name": "Gain6",
+            "type": "Gain",
+            "sid": "48",
+            "parameters": {}
+          },
+          {
+            "name": "Gain7",
+            "type": "Gain",
+            "sid": "50",
+            "parameters": {
+              "Gain": "10"
+            }
+          },
+          {
+            "name": "Scope",
+            "type": "Scope",
+            "sid": "2",
+            "parameters": {
+              "NumInputPorts": "4",
+              "Floating": "off"
+            }
+          },
+          {
+            "name": "Step",
+            "type": "Step",
+            "sid": "3",
+            "parameters": {
+              "SampleTime": "0"
+            }
+          },
+          {
+            "name": "Sum",
+            "type": "Sum",
+            "sid": "24",
+            "parameters": {
+              "Inputs": "|++"
+            }
+          },
+          {
+            "name": "Sum1",
+            "type": "Sum",
+            "sid": "30",
+            "parameters": {
+              "Inputs": "|++"
+            }
+          },
+          {
+            "name": "Sum2",
+            "type": "Sum",
+            "sid": "33",
+            "parameters": {
+              "Inputs": "|++"
+            }
+          },
+          {
+            "name": "Sum3",
+            "type": "Sum",
+            "sid": "36",
+            "parameters": {
+              "Inputs": "|++"
+            }
+          }
+        ],
+        "lines": [
+          "<Line>\n    <P Name=\"ZOrder\">54</P>\n    <P Name=\"Src\">24#out:1</P>\n    <P Name=\"Dst\">22#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">57</P>\n    <P Name=\"Src\">22#out:1</P>\n    <P Name=\"Dst\">2#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">49</P>\n    <P Name=\"Src\">3#out:1</P>\n    <P Name=\"Points\">[18, 0]</P>\n    <Branch>\n      <P Name=\"ZOrder\">111</P>\n      <P Name=\"Points\">[30, 0]</P>\n      <Branch>\n        <P Name=\"ZOrder\">122</P>\n        <P Name=\"Dst\">42#in:1</P>\n      </Branch>\n      <Branch>\n        <P Name=\"ZOrder\">121</P>\n        <P Name=\"Points\">[0, 39; 142, 0]</P>\n        <P Name=\"Dst\">24#in:2</P>\n      </Branch>\n    </Branch>\n    <Branch>\n      <P Name=\"ZOrder\">82</P>\n      <P Name=\"Points\">[0, 65]</P>\n      <Branch>\n        <P Name=\"ZOrder\">112</P>\n        <P Name=\"Points\">[32, 0]</P>\n        <Branch>\n          <P Name=\"ZOrder\">134</P>\n          <P Name=\"Dst\">43#in:1</P>\n        </Branch>\n        <Branch>\n          <P Name=\"ZOrder\">133</P>\n          <P Name=\"Points\">[0, 33; 140, 0]</P>\n          <P Name=\"Dst\">30#in:2</P>\n        </Branch>\n      </Branch>\n      <Branch>\n        <P Name=\"ZOrder\">85</P>\n        <P Name=\"Points\">[0, 65]</P>\n        <Branch>\n          <P Name=\"ZOrder\">113</P>\n          <P Name=\"Points\">[32, 0]</P>\n          <Branch>\n            <P Name=\"ZOrder\">137</P>\n            <P Name=\"Dst\">47#in:1</P>\n          </Branch>\n          <Branch>\n            <P Name=\"ZOrder\">136</P>\n            <P Name=\"Points\">[0, 33; 140, 0]</P>\n            <P Name=\"Dst\">33#in:2</P>\n          </Branch>\n        </Branch>\n        <Branch>\n          <P Name=\"ZOrder\">87</P>\n          <P Name=\"Points\">[0, 65; 32, 0]</P>\n          <Branch>\n            <P Name=\"ZOrder\">139</P>\n            <P Name=\"Dst\">49#in:1</P>\n          </Branch>\n          <Branch>\n            <P Name=\"ZOrder\">138</P>\n            <P Name=\"Points\">[0, 39; 140, 0]</P>\n            <P Name=\"Dst\">36#in:2</P>\n          </Branch>\n        </Branch>\n      </Branch>\n    </Branch>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">67</P>\n    <P Name=\"Src\">30#out:1</P>\n    <P Name=\"Dst\">28#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">72</P>\n    <P Name=\"Src\">33#out:1</P>\n    <P Name=\"Dst\">31#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">77</P>\n    <P Name=\"Src\">36#out:1</P>\n    <P Name=\"Dst\">34#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">78</P>\n    <P Name=\"Src\">28#out:1</P>\n    <P Name=\"Dst\">2#in:2</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">79</P>\n    <P Name=\"Src\">31#out:1</P>\n    <P Name=\"Dst\">2#in:3</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">80</P>\n    <P Name=\"Src\">34#out:1</P>\n    <P Name=\"Dst\">2#in:4</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">119</P>\n    <P Name=\"Src\">41#out:1</P>\n    <P Name=\"Dst\">24#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">120</P>\n    <P Name=\"Src\">42#out:1</P>\n    <P Name=\"Dst\">41#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">123</P>\n    <P Name=\"Src\">43#out:1</P>\n    <P Name=\"Dst\">44#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">130</P>\n    <P Name=\"Src\">47#out:1</P>\n    <P Name=\"Dst\">48#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">131</P>\n    <P Name=\"Src\">49#out:1</P>\n    <P Name=\"Dst\">50#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">132</P>\n    <P Name=\"Src\">44#out:1</P>\n    <P Name=\"Dst\">30#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">140</P>\n    <P Name=\"Src\">50#out:1</P>\n    <P Name=\"Dst\">36#in:1</P>\n  </Line>\n  ",
+          "<Line>\n    <P Name=\"ZOrder\">141</P>\n    <P Name=\"Src\">48#out:1</P>\n    <P Name=\"Dst\">33#in:1</P>\n  </Line>\n"
+        ]
+      }
+    ]
+  }
+]

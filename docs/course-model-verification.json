@@ -1,0 +1,230 @@
+[
+  {
+    "file": "lab1_connections_simulink.m",
+    "status": "passed",
+    "blocks": 5,
+    "error": ""
+  },
+  {
+    "file": "lab1_conversion_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab1_dynamic_feedback_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab1_feedback_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab1_ode_demo_simulink.m",
+    "status": "passed",
+    "blocks": 6,
+    "error": ""
+  },
+  {
+    "file": "lab1_residue1_simulink.m",
+    "status": "algebra-only",
+    "blocks": 0,
+    "error": ""
+  },
+  {
+    "file": "lab1_residue2_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab1_tf1_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab1_tf2_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab1_zpk1_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab1_zpk2_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab2_d_simulink.m",
+    "status": "passed",
+    "blocks": 6,
+    "error": ""
+  },
+  {
+    "file": "lab2_inertia_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab2_integrator_simulink.m",
+    "status": "passed",
+    "blocks": 5,
+    "error": ""
+  },
+  {
+    "file": "lab2_p_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab2_pd_simulink.m",
+    "status": "passed",
+    "blocks": 8,
+    "error": ""
+  },
+  {
+    "file": "lab2_pi_simulink.m",
+    "status": "passed",
+    "blocks": 7,
+    "error": ""
+  },
+  {
+    "file": "lab3_damping_sweep_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab3_example1_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab3_example4_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab3_frequency_sweep_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab3_second_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab3_task1_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab3_task2_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab3_task3_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab3_task4_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab3_zero_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab4_reduced_simulink.m",
+    "status": "passed",
+    "blocks": 7,
+    "error": ""
+  },
+  {
+    "file": "lab4_stability1_simulink.m",
+    "status": "passed",
+    "blocks": 8,
+    "error": ""
+  },
+  {
+    "file": "lab4_stability2_simulink.m",
+    "status": "passed",
+    "blocks": 8,
+    "error": ""
+  },
+  {
+    "file": "lab4_stability3_simulink.m",
+    "status": "passed",
+    "blocks": 8,
+    "error": ""
+  },
+  {
+    "file": "lab5_bandwidth_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab5_frequency_inertia_simulink.m",
+    "status": "passed",
+    "blocks": 4,
+    "error": ""
+  },
+  {
+    "file": "lab5_frequency_second_simulink.m",
+    "status": "passed",
+    "blocks": 8,
+    "error": ""
+  },
+  {
+    "file": "lab6_lead1_simulink.m",
+    "status": "passed",
+    "blocks": 6,
+    "error": ""
+  },
+  {
+    "file": "lab6_lead2_simulink.m",
+    "status": "passed",
+    "blocks": 8,
+    "error": ""
+  },
+  {
+    "file": "lab6_lead_example1_simulink.m",
+    "status": "passed",
+    "blocks": 6,
+    "error": ""
+  },
+  {
+    "file": "lab6_lead_example2_simulink.m",
+    "status": "passed",
+    "blocks": 8,
+    "error": ""
+  }
+]

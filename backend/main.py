@@ -14,7 +14,7 @@ from .providers import status as native_status,execute
 from .reporting import report_bytes,csv_data
 
 RUNTIME=ROOT/'runtime';RUNTIME.mkdir(exist_ok=True)
-app=FastAPI(title='Control Lab Student Platform',version='2.1.0')
+app=FastAPI(title='Control Lab Student Platform',version='2.2.0')
 OWNER=contextvars.ContextVar('owner',default=None)
 
 @app.middleware('http')
@@ -97,7 +97,7 @@ def clean(v):
 def vector(v):return np.asarray(v,dtype=float).reshape(-1).tolist()
 
 @app.get('/api/health')
-def health():return dict(status='ok',version='2.1.0',application='control-lab-workbench',matlab=native_status(),capabilities={'platform':True,'native':native_status()},python=os.sys.version.split()[0],local_only=False)
+def health():return dict(status='ok',version='2.2.0',application='control-lab-workbench',matlab=native_status(),capabilities={'platform':True,'native':native_status()},python=os.sys.version.split()[0],local_only=False)
 
 @app.get('/api/catalog')
 def catalog():return get_catalog()
@@ -134,6 +134,7 @@ def run(req:RunRequest):
             if result['metrics']['stability']=='stable' and 'ramp_error_theoretical' in model['design']:result['metrics']['ramp_error']=model['design']['ramp_error_theoretical']
             if 'requirements' in model['design']:result['checks']={k:result['metrics'].get(k) is not None and result['metrics'][k]<=v+1e-8 for k,v in model['design']['requirements'].items()}
             if model['task_id']=='lead1':result['checks']={'phase_margin':result['margins']['phase_margin'] is not None and result['margins']['phase_margin']>model['params']['targetPM'],'gain_margin_db':result['margins']['gain_margin_infinite'] or (result['margins']['gain_margin_db'] is not None and result['margins']['gain_margin_db']>10)}
+            if model['task_id']=='lead_example2':result['checks']={'phase_margin':result['margins']['phase_margin'] is not None and result['margins']['phase_margin']>model['params']['targetPM']}
         result.update(id=id,created_at=stamp(),elapsed=round(time.perf_counter()-start,3),code=matlab_code(model))
         return save_run(clean(result))
     except ValueError as e:raise HTTPException(422,str(e))

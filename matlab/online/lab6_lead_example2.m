@@ -7,8 +7,8 @@ targetPM = 35;
 reserve = 8;
 alpha = 6;
 wm = 6;
-MpReq = 30;
-tsReq = 5;
+MpReq = 27.5;
+tsReq = 1.7;
 essReq = 0.1;
 frequency = 1;
 A = 1;
@@ -37,8 +37,7 @@ else
     if isstable(sys), disp(stepinfo(y,t,dcgain(sys)*A,'SettlingTimeThreshold',0.02)); end
 end
 figure; bode(Gopen); grid on;
-if isproper(sys) && isstable(sys)
-    info=stepinfo(sys);
-    disp(struct('overshoot_pass',info.Overshoot<=MpReq,'settling_pass',info.SettlingTime<=tsReq));
-    ess=0; disp(struct('ramp_error',ess,'ramp_error_pass',ess<=essReq));
-end
+disp(struct('Ka',K,'phase_margin_pass',PM>targetPM));
+% 理想超前电路选值：C_design 可按元件条件修改
+C_design=1e-6; R1_design=1/(wz*C_design); R2_design=R1_design/(alpha-1); R3_design=R1_design+R2_design;
+disp(table(R1_design,R2_design,R3_design,C_design));

@@ -26,3 +26,5 @@ else
     xlabel('Time (s)'); ylabel('Amplitude'); legend('Input','Output');
 end
 figure; bode(Gopen); grid on;
+
+[wn_modes,zeta_modes,poles_modes]=damp(sys); disp(table(poles_modes,wn_modes,zeta_modes));

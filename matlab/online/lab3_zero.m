@@ -1,8 +1,8 @@
 % Control Lab · 实际结果由你在 MATLAB / MATLAB Online 中运行得到
 % 网页中的曲线是默认参数的预计算示例，不代表当前代码已经执行
 clear; clc; close all;
-zeta = 0.5;
-wn = 10;
+zeta = 0.31622776601683794;
+wn = 3.1622776601683795;
 zero = 5;
 K = 1;
 frequency = 1;
@@ -27,3 +27,5 @@ else
     if isstable(sys), disp(stepinfo(y,t,dcgain(sys)*A,'SettlingTimeThreshold',0.02)); end
 end
 figure; bode(Gopen); grid on;
+
+[wn_modes,zeta_modes,poles_modes]=damp(sys); disp(table(poles_modes,wn_modes,zeta_modes));

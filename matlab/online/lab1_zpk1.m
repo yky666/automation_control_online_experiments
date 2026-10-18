@@ -24,3 +24,9 @@ else
     if isstable(sys), disp(stepinfo(y,t,dcgain(sys)*A,'SettlingTimeThreshold',0.02)); end
 end
 figure; bode(Gopen); grid on;
+
+% 课件模型转换：包含双向还原，不只是打印 tf
+[z0,p0,k0]=tf2zp(num,den); Gz=zpk(z0,p0,k0); disp(Gz);
+[nback,dback]=zp2tf(z0,p0,k0); disp(tf(nback,dback));
+[rr,pp,kk]=residue(num,den); [nr,dr]=residue(rr,pp,kk); disp(tf(nr,dr));
+if isproper(sys), Gss=ss(sys); disp(Gss); disp(tf(Gss)); end

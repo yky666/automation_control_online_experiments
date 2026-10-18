@@ -51,7 +51,7 @@ it('browses all 33 examples and redirects Simulink only after confirmation',asyn
   }
  }
  fireEvent.click(screen.getByRole('tab',{name:'Simulink 仿真'}));
- const button=screen.getByRole('button',{name:'进入 Online 仿真'});expect(button.disabled).toBe(true);
+ const button=await screen.findByRole('button',{name:'复制画布并进入 Simulink Online'});expect(button.disabled).toBe(true);
  fireEvent.click(screen.getByRole('checkbox',{name:'我已有可用的 MATLAB Online 许可'}));fireEvent.click(button);
  await waitFor(()=>expect(navigator.clipboard.writeText).toHaveBeenCalled());
  expect(window.open).toHaveBeenCalledWith(onlineUrl(6,'lead_example2','simulink'),'_blank');
@@ -61,7 +61,7 @@ it('generates changed task parameters, sine settings and valid custom-model scri
  const request={lab_id:3,task_id:'second',params:{zeta:.7,wn:3,frequency:2},amplitude:2,stop_time:7,points:2001,settling_threshold:.05,auto_duration:false,input_signal:'sine',solver:'ode15s'};
  const code=makeCode(example,request,'simulink');
  expect(code).toContain('zeta = 0.7;');expect(code).toContain('wn = 3;');expect(code).toContain('frequency = 2;');expect(code).toContain('stop_time = 7;');expect(code).toContain("'Solver','ode15s'");
- expect(code).toContain('new_system(mdl)');expect(()=>makeCode(example,{...request,points:NaN})).toThrow();
+ expect(code).toContain('new_system(mdl)');expect(code).toContain('simulink/Sources/Sine Wave');expect(()=>makeCode(example,{...request,points:NaN})).toThrow();
  const scan=makeScanCode(example,request,'amplitude',[1,2,3]);
  expect(scan).toContain('A = 1;');expect(scan).toContain('A = 3;');expect(scan).not.toContain('close all');
 });

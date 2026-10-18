@@ -27,3 +27,5 @@ else
     if isstable(sys), disp(stepinfo(y,t,dcgain(sys)*A,'SettlingTimeThreshold',0.02)); end
 end
 figure; bode(Gopen); grid on;
+
+[wn_modes,zeta_modes,poles_modes]=damp(sys); disp(table(poles_modes,wn_modes,zeta_modes));

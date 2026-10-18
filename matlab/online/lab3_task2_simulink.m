@@ -28,17 +28,29 @@ else
 end
 figure; bode(Gopen); grid on;
 
-
-assert(isproper(sys),'理想微分需加入滤波后再用 Transfer Fcn');
-mdl = 'control_lab_3_task2';
+[wn_modes,zeta_modes,poles_modes]=damp(sys); disp(table(poles_modes,wn_modes,zeta_modes));
+% 课程模块结构；在原生 Simulink 中继续插入、组合、编辑和仿真
+mdl = 'course_lab3_task2';
 if bdIsLoaded(mdl), close_system(mdl,0); end
 new_system(mdl);
-add_block('simulink/Sources/From Workspace',[mdl '/Input'],'VariableName','web_input','Position',[30 80 150 110]);
-add_block('simulink/Continuous/Transfer Fcn',[mdl '/Plant'],'Numerator',mat2str(num),'Denominator',mat2str(den),'Position',[220 70 390 125]);
-add_block('simulink/Sinks/To Workspace',[mdl '/Output'],'VariableName','web_output','SaveFormat','Timeseries','Position',[450 80 580 110]);
-add_line(mdl,'Input/1','Plant/1'); add_line(mdl,'Plant/1','Output/1');
-wks=get_param(mdl,'ModelWorkspace'); assignin(wks,'web_input',timeseries(u,t));
-set_param(mdl,'StopTime',num2str(t(end),16),'Solver','ode45','MaxStep',num2str(t(2)-t(1),16),'RelTol','1e-7','AbsTol','1e-9','ReturnWorkspaceOutputs','on');
+[num,den]=tfdata(sys,'v');
+if exist('G0','var'), [plant_num,plant_den]=tfdata(G0,'v'); end
+if exist('u','var') && exist('t','var'), wks=get_param(mdl,'ModelWorkspace'); assignin(wks,'web_input',timeseries(u,t)); end
+% 将模块变量保存到模型工作区，避免依赖个人基础工作区配置。
+wks=get_param(mdl,'ModelWorkspace');
+course_variables={'A','K','T','Tf','T1','T2','frequency','wn','zeta','alpha','wz','wp','GBW','num','den','plant_num','plant_den'};
+for course_i=1:numel(course_variables), course_name=course_variables{course_i}; if exist(course_name,'var'), assignin(wks,course_name,eval(course_name)); end; end
+add_block('simulink/Sources/Step',[mdl '/b1'],'Position',[30 100 145 165],'Time','0','Before','0','After','A');
+add_block('simulink/Continuous/Transfer Fcn',[mdl '/b2'],'Position',[350 100 465 165],'Numerator','num','Denominator','den');
+add_block('simulink/Sinks/Scope',[mdl '/b3'],'Position',[1080 100 1195 165],'NumInputPorts','1');
+add_line(mdl,'b1/1','b2/1','autorouting','on');
+add_line(mdl,'b2/1','b3/1','autorouting','on');
+add_block('simulink/Sinks/To Workspace',[mdl '/Record'],'VariableName','web_output','SaveFormat','Timeseries','Position',[1070 340 1190 380]);
+add_line(mdl,'b2/1','Record/1','autorouting','on');
+model_stop=5; model_step=model_stop/1500;
+if exist('t','var') && numel(t)>1, model_stop=t(end); model_step=t(2)-t(1); end
+set_param(mdl,'StopTime',num2str(model_stop,16),'Solver','ode45','RelTol','1e-7','AbsTol','1e-9','MaxStep',num2str(model_step,16),'ReturnWorkspaceOutputs','on');
 save_system(mdl); open_system(mdl);
+% Record 为附加数据记录模块；Scope 可双击查看各通道。
 out=sim(mdl); yy=out.get('web_output');
-figure; plot(yy.Time,yy.Data); grid on;
+figure; plot(yy.Time,yy.Data); grid on; xlabel('Time (s)'); ylabel('Output');

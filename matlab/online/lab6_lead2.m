@@ -42,3 +42,6 @@ if isproper(sys) && isstable(sys)
     disp(struct('overshoot_pass',info.Overshoot<=MpReq,'settling_pass',info.SettlingTime<=tsReq));
     ess=1/K; disp(struct('ramp_error',ess,'ramp_error_pass',ess<=essReq));
 end
+% 理想超前电路选值：C_design 可按元件条件修改
+C_design=1e-6; R1_design=1/(wz*C_design); R2_design=R1_design/(alpha-1); R3_design=R1_design+R2_design;
+disp(table(R1_design,R2_design,R3_design,C_design));

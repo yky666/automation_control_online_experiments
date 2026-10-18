@@ -2,6 +2,8 @@
 
 ## 现在能使用的功能
 
+2.2 补充了可编辑课程模块画布和 37 个实际运行验证的原生模型。可以在个人 Simulink Online 直接打开默认 `.slx` 编辑；当前画布修改导出/复制成建模脚本运行。模型变量保存在 Model Workspace，详见 [逐章覆盖核查](实验一至六覆盖核查.md)。这仍不是把整个官方 Simulink 或通用 Simscape 电路库嵌入本站。
+
 学校已有许可、尚无服务器。2.1 学生界面使用静态示例与官方 GitHub 跳转：无 Online 权限时查看代码、默认结果示例并下载到本地；已有可用权限时跳转打开对应任务，运行在个人 MATLAB Online 会话。当前参数修改会复制到剪贴板，需在 Online 粘贴后点击 Run。
 
 按钮实际执行“复制脚本＋打开官方仓库文件”，不自动执行或自动回传结果。网页不能跨站读取 MathWorks 登录态和许可证；许可选项是用户选择，最终权限由 MathWorks 验证。MathWorks 还提供有时限的基本版，不能声称本网页严格验证了学校付费许可。[官方 GitHub 跳转说明](https://www.mathworks.com/help/matlab/matlab_env/open-github-repositories-in-matlab-online.html)与[Online 版本说明](https://www.mathworks.com/products/matlab-online/matlab-online-versions.html)说明其实际行为。

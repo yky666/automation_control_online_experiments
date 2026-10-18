@@ -96,12 +96,26 @@ LABS=[
 LABS[5]['sections'].insert(1,section('阻容电路 · 有源与无源超前网络','课件电路中 R₁ 与 C 并联，其等效阻抗与 R₂ 串联。无源网络取 R₂ 上的分压；有源网络以串联阻抗为输入阻抗、R₃ 为反馈阻抗，使用运放关系 −Zf/Zin。工作台有源模型采用额外反相补偿并归一化低频增益；无源网络则单独补偿衰减。',r'Z_1(s)=R_1\parallel\frac1{Cs}=\frac{R_1}{1+R_1Cs}',r'G_{\rm passive}(s)=\frac{R_2}{R_2+Z_1(s)}=\frac1\alpha\frac{1+\alpha Ts}{1+Ts}',r'\alpha=\frac{R_1+R_2}{R_2}>1,\quad T=\frac{R_1R_2C}{R_1+R_2},\quad\alpha T=R_1C',r'G_{\rm active}(s)=-\frac{R_3}{R_1+R_2}\frac{1+\alpha Ts}{1+Ts}'))
 
 LABS[2]['fields'].append(field('K','前向增益 K',1,0.01,20,0.01))
+LABS[0]['tasks'] += [
+ task('ode_demo','Simulink 入门 · 积分器反馈建模',num=[1],den=[1,2]),
+ task('conversion','教学例 · 模型双向转换',num=[1,3],den=[1,2,2,1]),
+ task('connections','教学例 · 串联、并联和反馈连接',num=[10,5],den=[1,1,0])]
+LABS[2]['tasks'] += [task('damping_sweep','例 2 · 固定 ωn 扫描阻尼比','second',{'wn':10,'zeta':.25}),task('frequency_sweep','例 3 · 固定阻尼比扫描 ωn','second',{'wn':10,'zeta':.25})]
+for t in LABS[2]['tasks']:
+    if t['id'] in ('second','zero'):t['defaults'].update(wn=10**.5,zeta=1/10**.5)
+for f in LABS[2]['fields']:
+    if f['key']=='zeta':f['min']=0
+for f in LABS[1]['fields']:
+    if f['key']=='T':f['max']=10
+for t in LABS[5]['tasks']:
+    if t['id']=='lead_example2':t['defaults']={'K':10,'alpha':6,'wm':6,'targetPM':35}
 for lab in LABS:
     if not any(f['key']=='frequency' for f in lab['fields']):lab['fields'].append(field('frequency','正弦频率 f',1,0.01,10000,0.01,'Hz'))
     for task_item in lab['tasks']:
         if task_item['kind'] in ('feedback','dynamic_feedback'):task_item['defaults'].setdefault('K',1)
 
 def get_catalog():
+    from .coursework import coursework,PRESETS
     originals=json.loads((ROOT/'sources'/'manifest.json').read_text(encoding='utf-8'))
     diagrams_path=ROOT/'sources'/'figures'/'diagrams.json'
     diagrams=json.loads(diagrams_path.read_text(encoding='utf-8')) if diagrams_path.exists() else {}
@@ -111,8 +125,10 @@ def get_catalog():
         for task in lab['tasks']:
             keys=list(task['defaults'])
             if task['kind']=='typical':keys={'p':['K'],'inertia':['K','T'],'integrator':['K','T'],'d':['K','T','Tf'],'pi':['K','T'],'pd':['K','T','Tf']}[task['id']]
-            tasks.append(dict(task,parameters=[k for k in keys if k in {f['key'] for f in lab['fields']}]))
-        result.append(dict(lab,tasks=tasks,diagrams={k.split(':')[1]:v for k,v in diagrams.items() if k.startswith(str(lab['id'])+':')},files=next(x['files'] for x in originals if x['id']==lab['id'])))
+            model_name=f"course_lab{lab['id']}_{task['id']}.slx"
+            native_model={'download':f'/models/{model_name}','online_file':f'matlab/models/{model_name}'} if (ROOT/'matlab/models'/model_name).is_file() else None
+            tasks.append(dict(task,parameters=[k for k in keys if k in {f['key'] for f in lab['fields']}],presets=PRESETS.get((lab['id'],task['id']),[]),native_model=native_model))
+        result.append(dict(lab,tasks=tasks,coursework=coursework(lab['id']),diagrams={k.split(':')[1]:v for k,v in diagrams.items() if k.startswith(str(lab['id'])+':')},files=next(x['files'] for x in originals if x['id']==lab['id'])))
     return result
 
 def get_task(lab_id,task_id):

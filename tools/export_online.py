@@ -30,7 +30,8 @@ def recipe(task):
         else:code+='stages=2;\n'
         code+='wz=wm/sqrt(alpha); wp=wm*sqrt(alpha);\nGc=tf([1/wz 1],[1/wp 1]);\nGopen=G0*Gc^stages;\n'
         close=True
-        if kind in ('lead2','lead_example2'):checks="if isproper(sys) && isstable(sys)\n    info=stepinfo(sys);\n    disp(struct('overshoot_pass',info.Overshoot<=MpReq,'settling_pass',info.SettlingTime<=tsReq));\n    ess="+('1/K' if kind=='lead2' else '0')+"; disp(struct('ramp_error',ess,'ramp_error_pass',ess<=essReq));\nend"
+        if kind=='lead2':checks="if isproper(sys) && isstable(sys)\n    info=stepinfo(sys);\n    disp(struct('overshoot_pass',info.Overshoot<=MpReq,'settling_pass',info.SettlingTime<=tsReq));\n    ess=1/K; disp(struct('ramp_error',ess,'ramp_error_pass',ess<=essReq));\nend"
+        if kind=='lead_example2':checks="disp(struct('Ka',K,'phase_margin_pass',PM>targetPM));"
     else:
         gain='K*' if kind in ('feedback','dynamic_feedback') else ''
         code=f"Gopen = tf({gain}{matlab_vector(task['num'])},{matlab_vector(task['den'])});";close=bool(gain)
@@ -48,7 +49,7 @@ def export():
     for lab in catalog:
         lab['files']=[f for f in lab['files'] if is_public_file(f['name'])]
         for task in lab['tasks']:
-            req=RunRequest(lab_id=lab['id'],task_id=task['id'],params=task['defaults'],stop_time=4 if lab['id']==4 else 5)
+            req=RunRequest(lab_id=lab['id'],task_id=task['id'],params=task['defaults'],amplitude=task['defaults'].get('A',1),stop_time=4 if lab['id']==4 else 5)
             m=build_model(req);r=clean(simulate_preview(m))
             r.update(engine_label='默认参数结果示例（预计算 · SciPy）',example=True,matlab_recipe=recipe(task)[0],matlab_checks=recipe(task)[1],parameter_bounds={f['key']:[f['min'],f['max']] for f in lab['fields']})
             key=f"{lab['id']}_{task['id']}"
@@ -59,6 +60,8 @@ def export():
             report=report.replace('自动控制实验报告','自动控制实验示例报告').replace('次已完成运行','组默认参数示例').replace('本报告依据保存的运行记录生成。不同引擎和工况分别标记；个人分析由填写内容保留。','本报告使用默认参数预计算示例。实际实验需要在自己的 MATLAB 会话执行，并记录运行结果。')
             (reports/(key+'.html')).write_text(report,encoding='utf-8')
     (dest/'catalog.json').write_text(json.dumps(catalog,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
+    for model in (ROOT/'matlab/models').glob('*.slx'):
+        target=ROOT/'public/models'/model.name;target.parent.mkdir(exist_ok=True);shutil.copy2(model,target)
     # Vite copies public assets. Original report submissions are excluded.
     public_sources=(ROOT/'public'/'sources').resolve()
     assert public_sources==ROOT.resolve()/'public'/'sources', 'Unexpected generated resource path'

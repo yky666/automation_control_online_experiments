@@ -10,13 +10,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends fonts-noto-cjk 
 COPY backend ./backend
 COPY sources ./sources
 COPY tools ./tools
+COPY matlab/models ./matlab/models
 COPY --from=dependencies /build/node_modules/katex/dist ./node_modules/katex/dist
 RUN python tools/export_online.py
 
 FROM dependencies AS frontend
 COPY index.html vite.config.js ./
 COPY frontend ./frontend
+COPY tools/export_physical.mjs ./tools/export_physical.mjs
+COPY matlab/physical ./matlab/physical
 COPY --from=course /build/public ./public
+RUN node tools/export_physical.mjs
 RUN npm run build
 RUN mkdir -p /report-math && cp -r node_modules/katex/dist/* /report-math/
 

@@ -26,6 +26,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Frontend dependencies failed.' }
 & $taskPython tools/export_online.py
 if ($LASTEXITCODE -ne 0) { throw 'Course example export failed.' }
 & node tools/export_scripts.mjs
+& node tools/export_physical.mjs
+if ($LASTEXITCODE -ne 0) { throw 'Physical circuit export failed.' }
 if ($LASTEXITCODE -ne 0) { throw 'MATLAB script export failed.' }
 & npm.cmd run build
 if ($LASTEXITCODE -ne 0) { throw 'Frontend build failed.' }

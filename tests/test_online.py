@@ -32,6 +32,20 @@ def test_static_export_excludes_submitted_reports():
     assert not is_public_file('自动控制实验报告.docx')
     assert not list((ROOT/'public/sources').rglob('*杨开元*'))
 
+
+def test_physical_downloads_are_real_models_with_successful_native_evidence():
+    from zipfile import ZipFile
+    evidence=json.loads((ROOT/'docs/physical-model-verification.json').read_text(encoding='utf-8'))
+    assert len(evidence)==18 and all(item['passed'] for item in evidence)
+    for item in evidence:
+        source=ROOT/'matlab/physical'/(item['name']+'.slx')
+        public=ROOT/'public/physical'/source.name
+        assert source.read_bytes()==public.read_bytes()
+        with ZipFile(source) as model:
+            assert 'simulink/blockdiagram.xml' in model.namelist()
+            xml=b' '.join(model.read(name) for name in model.namelist() if name.endswith('.xml'))
+            assert b'fl_lib' in xml and b'physical_input' in xml
+
 def test_course_pages_presets_and_original_model_corrections():
     from backend.catalog import get_catalog
     from backend.main import RunRequest,preview

@@ -1,13 +1,13 @@
 {
   "name": "control-lab-workbench",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "export:online": "python tools/export_online.py && node tools/export_scripts.mjs",
+    "export:online": "python tools/export_online.py && node tools/export_scripts.mjs && node tools/export_physical.mjs",
     "test": "vitest run"
   },
   "dependencies": {

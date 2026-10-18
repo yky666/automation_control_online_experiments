@@ -2,6 +2,8 @@
 
 ## 现在能使用的功能
 
+2.3 增加无需服务器的浏览器实际仿真：课程信号框图、R/C/运放元件电路都在 Web Worker 中求解，可改参数与接线、查看波形、导出 CSV/JSON 和生成本次报告。它是自有数值求解器，不是云端 MATLAB。原生 Simscape 电路仍使用个人 Online 或本机许可运行，导出 CSV 后可手动导回网页。详见 [元件仿真说明](元件电路仿真.md)。
+
 2.2 补充了可编辑课程模块画布和 37 个实际运行验证的原生模型。可以在个人 Simulink Online 直接打开默认 `.slx` 编辑；当前画布修改导出/复制成建模脚本运行。模型变量保存在 Model Workspace，详见 [逐章覆盖核查](实验一至六覆盖核查.md)。这仍不是把整个官方 Simulink 或通用 Simscape 电路库嵌入本站。
 
 学校已有许可、尚无服务器。2.1 学生界面使用静态示例与官方 GitHub 跳转：无 Online 权限时查看代码、默认结果示例并下载到本地；已有可用权限时跳转打开对应任务，运行在个人 MATLAB Online 会话。当前参数修改会复制到剪贴板，需在 Online 粘贴后点击 Run。
@@ -10,7 +12,7 @@
 
 ## 无计算服务器的发布
 
-2.1 学生页面可通过 GitHub Pages 发布。仓库 Settings → Pages 选择 GitHub Actions，再运行手动工作流 `Publish static course website`。页面只读取静态示例，实际 MATLAB/Simulink 运行发生在用户个人会话。
+学生页面可通过 GitHub Pages 发布。仓库 Settings → Pages 选择 GitHub Actions，再运行手动工作流 `Publish static course website`。页面读取静态资源并在浏览器运行教学求解器；实际 MATLAB/Simulink/Simscape 运行发生在用户个人会话。
 
 以下内容是可选的教师计算服务扩展；当前学生页面不调用后台运行接口。学校许可本身不会产生本项目可直接调用的 REST 接口。
 

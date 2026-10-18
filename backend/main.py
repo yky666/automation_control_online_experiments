@@ -14,7 +14,7 @@ from .providers import status as native_status,execute
 from .reporting import report_bytes,csv_data
 
 RUNTIME=ROOT/'runtime';RUNTIME.mkdir(exist_ok=True)
-app=FastAPI(title='Control Lab Student Platform',version='2.2.0')
+app=FastAPI(title='Control Lab Student Platform',version='2.3.0')
 OWNER=contextvars.ContextVar('owner',default=None)
 
 @app.middleware('http')
@@ -97,7 +97,7 @@ def clean(v):
 def vector(v):return np.asarray(v,dtype=float).reshape(-1).tolist()
 
 @app.get('/api/health')
-def health():return dict(status='ok',version='2.2.0',application='control-lab-workbench',matlab=native_status(),capabilities={'platform':True,'native':native_status()},python=os.sys.version.split()[0],local_only=False)
+def health():return dict(status='ok',version='2.3.0',application='control-lab-workbench',matlab=native_status(),capabilities={'platform':True,'native':native_status()},python=os.sys.version.split()[0],local_only=False)
 
 @app.get('/api/catalog')
 def catalog():return get_catalog()

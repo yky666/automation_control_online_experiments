@@ -7,9 +7,10 @@ import 'katex/dist/katex.min.css';
 import './styles.css';
 import {BlockEditor} from './BlockEditor.jsx';
 import {CourseManual} from './CourseManual.jsx';
+import {CircuitLab} from './CircuitLab.jsx';
 import {loadCourse,loadExample,makeCode,makeScanCode,onlineUrl,assetUrl,downloadText,exampleCsv} from './online.js';
 
-const TABS=[['content','实验内容',BookOpen],['code','MATLAB 代码',Braces],['simulink','Simulink 仿真',Boxes],['resources','资料与记录',Layers]];
+const TABS=[['content','实验内容',BookOpen],['circuit','元件电路仿真',Activity],['code','MATLAB 代码',Braces],['simulink','Simulink 仿真',Boxes],['resources','资料与记录',Layers]];
 const STATES={stable:'渐近稳定',marginal:'临界状态',unstable:'不稳定'};
 const fmt=(v,dec=3)=>v==null?'—':typeof v==='number'?Number(v.toPrecision(dec+1)).toString():v;
 const api=async(path,body)=>{
@@ -132,7 +133,7 @@ export function App({mode='online'}){
   <div className="nav-label">实验目录 <span>01 — 06</span></div>
   <div className="nav-search"><Search size={14}/><input aria-label="搜索实验" placeholder="搜索实验内容" value={search} onChange={e=>setSearch(e.target.value)}/>{search&&<button aria-label="清除搜索" onClick={()=>setSearch('')}><X size={13}/></button>}</div>
   <nav>{labs.filter(l=>(l.title+l.tag).includes(search)).map(l=><button disabled={running} key={l.id} className={'lab-link '+(labId===l.id?'active':'')} onClick={()=>chooseLab(l)}><span className="lab-number">0{l.id}</span><span>{l.title}<small>{l.tag}</small></span>{history.some(r=>r.model.lab_id===l.id)?<Check size={14} className="nav-check"/>:<ChevronRight size={14} className="nav-chevron"/>}</button>)}{labs.filter(l=>(l.title+l.tag).includes(search)).length===0&&<p className="muted search-empty">未找到对应实验</p>}</nav>
-  <div className="sidebar-bottom"><button className="sidebar-tool" onClick={()=>{setTab('resources');mainRef.current?.scrollTo(0,0)}}><History size={16}/>运行记录 <span>{history.length}</span></button><button className="sidebar-tool" onClick={()=>setHelp(true)}><Info size={16}/>使用说明<ArrowUpRight size={14}/></button><div className="engine-status"><i className={nativeReady?'online':''}/><span>{onlineMode?(licensed?'MATLAB Online 跳转模式':'代码与示例浏览'):nativeReady?health.capabilities.native.label:'学生免 MATLAB 模式'}<small>{onlineMode?'实际运行在个人 MATLAB 会话':nativeReady?'参数化计算服务可用':'平台运行 · 学校许可使用 MATLAB Online'}</small></span></div><div className="sidebar-footer">从理论推导，到实验验证。</div></div>
+  <div className="sidebar-bottom"><button className="sidebar-tool" onClick={()=>{setTab('resources');mainRef.current?.scrollTo(0,0)}}><History size={16}/>运行记录 <span>{history.length}</span></button><button className="sidebar-tool" onClick={()=>setHelp(true)}><Info size={16}/>使用说明<ArrowUpRight size={14}/></button><div className="engine-status"><i className={nativeReady?'online':''}/><span>{onlineMode?(licensed?'浏览器仿真 + MATLAB Online':'浏览器仿真 · 无需本机 MATLAB'):nativeReady?health.capabilities.native.label:'学生免 MATLAB 模式'}<small>{onlineMode?'信号框图 / 元件电路可直接运行':nativeReady?'参数化计算服务可用':'平台运行 · 学校许可使用 MATLAB Online'}</small></span></div><div className="sidebar-footer">从理论推导，到实验验证。</div></div>
  </aside>
  <div className="main-shell"><header className="topbar"><div><button className="icon-btn sidebar-toggle" aria-label="切换实验目录" onClick={()=>setSidebar(!sidebar)}>{sidebar?<PanelLeftClose size={18}/>:<PanelLeftOpen size={18}/>}</button><span className="breadcrumb">课程实验 <ChevronRight size={13}/> <b>实验 0{labId}</b></span></div><div className="topbar-right"><span className="local-badge"><i/>{onlineMode?'默认参数示例':'免 MATLAB 实验环境'}</span><button className="report-btn" disabled={running} onClick={openReport}><FileText size={16}/>{onlineMode?'查看示例报告':'生成报告'}</button></div></header>
  <main ref={mainRef}>
@@ -142,8 +143,9 @@ export function App({mode='online'}){
  <div className={'workspace '+(compact?'compact':'')}>
  <div className="reading-pane">
   <div className="task-heading"><div className="task-title"><span className="section-kicker">当前实验任务</span><select aria-label="选择实验任务" disabled={running} value={taskId} onChange={e=>{if(e.target.value===taskId)return;++sequence.current;++previewSeq.current;setResult(null);setCode('');setTaskId(e.target.value);setEdited(false)}}>{lab.tasks.map(t=><option key={t.id} value={t.id}>{t.name}</option>)}</select></div><span className="task-live"><i/>{onlineMode?'预计算示例':result?.id?'已保存运行':'实时预览'}</span></div>
-  {onlineMode&&<div className="example-note" role="note"><Info size={16}/><p>图表和指标展示默认参数的预计算示例。修改参数只更新 MATLAB 脚本；实际结果请在 Online 或本地运行后查看。</p></div>}
-  <ResultPanel key={labId+':'+taskId} result={result} scan={scan} setGraph={setGraph} graph={graph} view={bodeView} setView={setBodeView} onExport={downloadData}/>
+  {tab==='circuit'&&result&&<CircuitLab key={'circuit:'+labId+':'+taskId} lab={lab} task={task} request={request} example={result} licensed={licensed}/>}
+  {tab!=='circuit'&&onlineMode&&<div className="example-note" role="note"><Info size={16}/><p>图表和指标展示默认参数的预计算示例。修改元件并直接求解请进入“元件电路仿真”；MATLAB / Simulink 脚本在 Online 或本地原生环境执行。</p>{[2,4,5,6].includes(labId)&&<button onClick={()=>setTab('circuit')}>进入元件电路仿真</button>}</div>}
+  {tab!=='circuit'&&<ResultPanel key={labId+':'+taskId} result={result} scan={scan} setGraph={setGraph} graph={graph} view={bodeView} setView={setBodeView} onExport={downloadData}/>}
   {result?.checks&&Object.keys(result.checks).length>0&&<div className="checks-row">{Object.entries(result.checks).map(([key,v])=><span className={v?'pass':'fail'} key={key}>{v?<CheckCircle2 size={14}/>:<AlertCircle size={14}/>}{{overshoot:'超调量',settling_time:'调节时间',ramp_error:'稳态误差',phase_margin:'相位裕度',gain_margin_db:'幅值裕度'}[key]}{v?'满足':'未满足'}</span>)}</div>}
   {onlineMode&&result&&['content','simulink'].includes(tab)&&<CourseManual key={'manual:'+labId+':'+taskId} lab={lab} task={task} request={request} example={result} onApply={applyCoursePreset} onSelectTask={id=>{++sequence.current;++previewSeq.current;setResult(null);setCode('' );setTaskId(id);setEdited(false)}}/>}
   {tab==='content'&&<>

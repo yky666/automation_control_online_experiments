@@ -1,12 +1,19 @@
-import React,{useState,useMemo,useRef} from 'react';
+import React,{useState,useMemo,useRef,useEffect} from 'react';
 import {BLOCKS,newBlock,portCount,courseGraph,validateGraph,modelScript} from './blocks.js';
 import {makeCode,downloadText,onlineUrl,onlineFileUrl,assetUrl} from './online.js';
+import {Waveform} from './CircuitLab.jsx';
+import {signalReport} from './signal-report.js';
 
 export function BlockEditor({request,example,licensed,coursework,nativeModel}){
  const key=`control-lab-graph-${request.lab_id}-${request.task_id}`;
  const [graph,setGraph]=useState(()=>{try{const g=JSON.parse(localStorage.getItem(key));if(g?.version===1&&Array.isArray(g.nodes)&&g.nodes.length&&validateGraph(g).filter(e=>!e.includes('未连接')).length===0)return g}catch{}return courseGraph(request,{...example.model,input_signal:request.input_signal||example.model.input_signal})});
  const [selected,setSelected]=useState(null),[source,setSource]=useState(''),[target,setTarget]=useState(''),[port,setPort]=useState(1),[notice,setNotice]=useState(''),[past,setPast]=useState([]);
  const svgRef=useRef(),drag=useRef(null),fileRef=useRef();
+ const worker=useRef(),runTimer=useRef();
+ const [running,setRunning]=useState(false),[simulation,setSimulation]=useState(null),[trace,setTrace]=useState('output');
+ const [reportStudent,setReportStudent]=useState(''),[reportAnalysis,setReportAnalysis]=useState('');
+ useEffect(()=>()=>{worker.current?.terminate();clearTimeout(runTimer.current)},[]);
+ function simulate(){setRunning(true);setNotice('正在求解当前画布…');worker.current?.terminate();const w=new Worker(new URL('./signal.worker.js',import.meta.url),{type:'module'});worker.current=w;const end=()=>{w.terminate();clearTimeout(runTimer.current);setRunning(false)};w.onmessage=e=>{end();if(e.data.error)setNotice(e.data.error);else{setSimulation(e.data.result);setTrace('output');setNotice('已按当前画布和右侧参数完成信号仿真。浏览器数值结果与原生 Simulink 结果分别标记。')}};w.onerror=e=>{end();setNotice(e.message)};runTimer.current=setTimeout(()=>{end();setNotice('仿真超时，请检查反馈或减少采样点')},45000);w.postMessage({graph,request,example})}
  const errors=useMemo(()=>validateGraph(graph),[graph]);const block=graph.nodes.find(b=>b.id===selected);
  function commit(next){setPast(p=>[...p.slice(-29),graph]);setGraph(next);try{localStorage.setItem(key,JSON.stringify(next))}catch{setNotice('浏览器存储已满，请下载结构 JSON 保存')}setNotice('')}
  function add(type){const ids=new Set(graph.nodes.map(n=>n.id));let i=1;while(ids.has('b'+i))i++;const next=newBlock(type,'b'+i,80+(graph.nodes.length%5)*220,430+Math.floor(graph.nodes.length/5)%4*150);commit({...graph,nodes:[...graph.nodes,next]});setSelected(next.id)}
@@ -23,7 +30,9 @@ export function BlockEditor({request,example,licensed,coursework,nativeModel}){
  function endDrag(){if(!drag.current)return;setPast(p=>[...p.slice(-29),drag.current.before]);drag.current=null;try{localStorage.setItem(key,JSON.stringify(graph))}catch{}}
  return <section className="block-editor" aria-label="课程模块搭建">
   <div className="section-heading"><h2>课程模块搭建</h2><span className="chapter-tag">插入 · 连线 · 编辑 · 导出</span></div>
-  <p className="muted">画布可编辑课程信号模块，修改会进入实际 Simulink 建模脚本。这里不执行仿真；原生元件库、Scope 和求解在 Simulink Online 中使用。右侧参数同步为脚本变量，画布结构以此处为准。</p>
+  <p className="muted">画布可编辑课程信号模块，点击“运行当前信号框图”可在浏览器直接求解；原生 Simulink 使用导出的脚本或模型。右侧参数作为脚本变量，结构以当前画布为准。网页求解器支持此处列出的线性模块，不执行任意 MATLAB 代码。</p>
+  <div className="sim-actions"><button className="primary-btn" disabled={running||!!errors.length} onClick={simulate}>{running?'正在求解…':'▶ 运行当前信号框图'}</button>{running&&<button onClick={()=>{worker.current?.terminate();clearTimeout(runTimer.current);setRunning(false);setNotice('求解已取消')}}>取消仿真</button>}</div>
+  {simulation&&<div className="signal-simulation"><h3>本次信号框图运行结果</h3><p>{simulation.method} · {simulation.createdAt}</p>{(JSON.stringify(simulation.graph)!==JSON.stringify(graph)||JSON.stringify(simulation.request)!==JSON.stringify(request))&&<p className="stale-result">参数或画布已修改，请重新运行；下图保留上次结果。</p>}<label>Scope 通道<select value={trace} onChange={e=>setTrace(e.target.value)}><option value="output">通道 1</option>{Object.keys(simulation.traces).map(k=><option key={k}>{k}</option>)}</select></label><Waveform result={simulation} trace={trace}/><div className="sim-actions"><button onClick={()=>downloadText('time,input,output\n'+simulation.time.map((t,i)=>[t,simulation.input[i],simulation.output[i]].join(',')).join('\n'),'signal_result.csv','text/csv')}>导出本次信号 CSV</button><button onClick={()=>downloadText(JSON.stringify(simulation),'signal_run.json','application/json')}>保存本次运行 JSON</button></div><details className="physical-report"><summary>生成本次信号实验报告</summary><label>姓名 / 学号<input value={reportStudent} onChange={e=>setReportStudent(e.target.value)}/></label><label>个人分析<textarea value={reportAnalysis} onChange={e=>setReportAnalysis(e.target.value)} rows="3"/></label><button onClick={()=>downloadText(signalReport(simulation,reportStudent,reportAnalysis),'信号框图实验报告.html','text/html')}>下载本次 HTML 报告</button></details><p className="tiny-note">隐式欧拉步长由时长和采样点决定；提高采样点数检查数值收敛。理想微分不以阶跃冲激的有限离散峰值作物理结论。</p></div>}
   {nativeModel&&<div className="sim-actions"><a className="secondary-btn" href={assetUrl(nativeModel.download)} download>下载已验证的原生 .slx</a><button className="primary-btn" disabled={!licensed} onClick={()=>{const page=window.open(onlineFileUrl(nativeModel.online_file),'_blank');if(page)page.opener=null;setNotice('打开的是默认工况的原生模型，可直接插块、连线、改参数。当前画布修改请使用下方“复制画布”入口。')}}>直接打开原生模型编辑器 ↗</button></div>}
   {request.lab_id===2&&['d','pd'].includes(request.task_id)&&<p className="example-note">Scope 通道 1 是课件理想微分结构，通道 2 是带 Tf 的滤波复核结构；理想阶跃尖峰不作为有限物理峰值。</p>}
   <div className="block-palette" aria-label="模块库">{Object.keys(BLOCKS).map(type=><button key={type} onClick={()=>add(type)} disabled={graph.nodes.length>=60}>＋ {type}</button>)}</div>

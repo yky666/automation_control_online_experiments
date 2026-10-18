@@ -18,6 +18,7 @@ tools/fix_scan.py
 tools/integrate_course_ui.py
 tools/update_course_release.py
 docs/frontend-tests.json
+matlab/physical/*_result.csv
 docs/示例报告-*
 sources/lab*/实验*+*.pdf
 sources/lab*/实验*+*.docx

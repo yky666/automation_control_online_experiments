@@ -65,3 +65,37 @@ it('generates changed task parameters, sine settings and valid custom-model scri
  const scan=makeScanCode(example,request,'amplitude',[1,2,3]);
  expect(scan).toContain('A = 1;');expect(scan).toContain('A = 3;');expect(scan).not.toContain('close all');
 });
+it('reports blocked Online and report windows instead of claiming success',async()=>{
+ render(<App/>);await waitFor(()=>expect(document.querySelector('.plot')).not.toBeNull());
+ window.open.mockReturnValue(null);
+ fireEvent.click(screen.getAllByRole('button',{name:'查看示例报告'})[0]);
+ expect(screen.getByRole('alert').textContent).toContain('拦截');
+ fireEvent.click(screen.getByRole('checkbox',{name:'我已有可用的 MATLAB Online 许可'}));
+ fireEvent.click(screen.getByRole('tab',{name:'MATLAB 代码'}));
+ fireEvent.click(screen.getByRole('button',{name:'复制并打开 MATLAB Online'}));
+ expect(screen.getByRole('alert').textContent).toContain('拦截');
+ expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
+});
+it('does not advertise an empty browser run archive as saved history',async()=>{
+ render(<App/>);await screen.findByRole('heading',{level:1});
+ expect(screen.queryByRole('button',{name:/运行记录/})).toBeNull();
+ fireEvent.click(screen.getByRole('button',{name:'课程资料'}));
+ expect(screen.getByRole('heading',{name:'如何保存实验结果'})).toBeTruthy();
+ expect(screen.queryByRole('heading',{name:'已保存运行'})).toBeNull();
+});
+it('warns at the known incorrect original integral model download',async()=>{
+ render(<App/>);await screen.findByRole('heading',{level:1});
+ fireEvent.click(screen.getByRole('button',{name:new RegExp('02.*'+catalog[1].title)}));
+ fireEvent.click(screen.getByRole('tab',{name:/资料与记录/}));
+ expect(screen.getByText(/原始 task3 分母缺少 s/)).toBeTruthy();
+});
+it('downloads current code when clipboard access fails without reporting a successful copy',async()=>{
+ render(<App/>);await waitFor(()=>expect(document.querySelector('.plot')).not.toBeNull());
+ navigator.clipboard.writeText.mockRejectedValue(Error('denied'));
+ fireEvent.click(screen.getByRole('checkbox',{name:'我已有可用的 MATLAB Online 许可'}));
+ fireEvent.click(screen.getByRole('tab',{name:'MATLAB 代码'}));
+ fireEvent.click(screen.getByRole('button',{name:'复制并打开 MATLAB Online'}));
+ await waitFor(()=>expect(screen.getByRole('status').textContent).toContain('当前脚本已下载'));
+ expect(screen.getByRole('status').textContent).not.toContain('当前修改已复制');
+ expect(HTMLAnchorElement.prototype.click).toHaveBeenCalled();
+});

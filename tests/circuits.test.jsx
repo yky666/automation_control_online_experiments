@@ -63,3 +63,31 @@ it('rebuilds all signal model coefficients and solves every course graph',()=>{
   expect(simulateSignal(courseGraph(request,e.model),request,e).output.every(Number.isFinite),t.id).toBe(true);
  }
 });
+it('keeps the working circuit and gives an error when rebuilding invalid parameters',()=>{
+ const lab=read('public/course/catalog.json')[3],task=lab.tasks[0],example=read(`public/course/examples/4_${task.id}.json`);
+ const {rerender}=render(<CircuitLab lab={lab} task={task} request={{params:task.defaults}} example={example} licensed={false}/>);
+ const before=screen.getByRole('img',{name:'电气元件端子与节点接线图'}).innerHTML;
+ rerender(<CircuitLab lab={lab} task={task} request={{params:{...task.defaults,K:-1}}} example={example} licensed={false}/>);
+ fireEvent.click(screen.getByRole('button',{name:'按当前任务参数重建'}));
+ expect(screen.getByRole('status').textContent).toContain('重建失败');
+ expect(screen.getByRole('img',{name:'电气元件端子与节点接线图'}).innerHTML).toBe(before);
+ expect(screen.getByRole('button',{name:'▶ 运行当前电路'}).disabled).toBe(false);
+});
+it('loads edited electrical connections and reports malformed imports without replacing the circuit',async()=>{
+ const lab=read('public/course/catalog.json')[1],task=lab.tasks[0],example=read('public/course/examples/2_p.json');
+ render(<CircuitLab lab={lab} task={task} request={{params:task.defaults}} example={example} licensed={false}/>);
+ const file=document.querySelector('input[type="file"][accept=".json"]');
+ const g=circuitTemplate(2,'p',{K:4});
+ fireEvent.change(file,{target:{files:[{size:100,text:async()=>JSON.stringify(g)}]}});
+ await waitFor(()=>expect(JSON.parse(localStorage.getItem('control-circuit-2-p'))).toEqual(g));
+ fireEvent.change(file,{target:{files:[{size:10,text:async()=>'{broken'}]}});
+ await waitFor(()=>expect(screen.getByRole('status').textContent).not.toBe(''));
+ expect(JSON.parse(localStorage.getItem('control-circuit-2-p'))).toEqual(g);
+});
+it('surfaces a blocked physical Online launch without claiming it opened',()=>{
+ const lab=read('public/course/catalog.json')[1],task=lab.tasks[0],example=read('public/course/examples/2_p.json');
+ vi.spyOn(window,'open').mockReturnValue(null);
+ render(<CircuitLab lab={lab} task={task} request={{params:task.defaults}} example={example} licensed={true}/>);
+ fireEvent.click(screen.getByRole('button',{name:'复制电路并进入 Online ↗'}));
+ expect(screen.getByRole('status').textContent).toContain('拦截');
+});

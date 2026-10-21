@@ -1,0 +1,553 @@
+{
+  "passed": true,
+  "counts": {
+    "signal": 37,
+    "circuit": 17
+  },
+  "scipy": "1.18.1",
+  "threshold": 0.02,
+  "normalization": "max(1, max(abs(reference)))",
+  "signal_points": [
+    10001,
+    20001
+  ],
+  "circuit_points": 20001,
+  "scope": "Default course cases only; not all editable configurations or native MATLAB",
+  "exclusions": [
+    "Non-proper algebraic task has no time response",
+    "Signal D/PD audit compares the filtered Scope; ideal impulse has no finite peak",
+    "Circuit D/PD excludes two samples around ramp corners and at startup"
+  ],
+  "source_sha256": {
+    "frontend/signal-solver.js": "bbb701f9c2e0760c13523666ca2698aae77de75f83aad9ba9bec5e3089df7597",
+    "frontend/circuits.js": "ec7838c5ccadf0e18f7a4b6df4df7fadf56086e3350971997215ef0ed67833b5",
+    "frontend/blocks.js": "fa8ace17eea1fe8986baaef00c3aac32f0ba39a682948cc2ef579b7aa6f51e04",
+    "tools/browser_numerical_cases.mjs": "4973704882324888665e3526a1b804dd89aa9807aacf64bfac6455f3418794b6",
+    "tools/verify_browser_numerics.py": "be5d03207962b69cdad70ad799fcd8de19932ca5083c8a6e1f3d5bde985e706f"
+  },
+  "results": [
+    {
+      "kind": "signal",
+      "lab": 1,
+      "task": "tf1",
+      "normalized_max_errors": [
+        5.318330934470993e-05,
+        2.6594591363302883e-05
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 1,
+      "task": "tf2",
+      "normalized_max_errors": [
+        0.00046203328221938364,
+        0.00023100236064067185
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 1,
+      "task": "zpk1",
+      "normalized_max_errors": [
+        0.0014232956700382768,
+        0.0007113041485829196
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 1,
+      "task": "zpk2",
+      "normalized_max_errors": [
+        0.0015781700037114984,
+        0.0007887212659256488
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 1,
+      "task": "residue2",
+      "normalized_max_errors": [
+        8.000340972434451e-05,
+        4.0007385327411355e-05
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 1,
+      "task": "feedback",
+      "normalized_max_errors": [
+        0.00021416834480042501,
+        0.00010712247067629077
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 1,
+      "task": "dynamic_feedback",
+      "normalized_max_errors": [
+        0.00034243809904688227,
+        0.00017127729302524042
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 1,
+      "task": "ode_demo",
+      "normalized_max_errors": [
+        9.193155866454861e-05,
+        4.597535234224237e-05
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 1,
+      "task": "conversion",
+      "normalized_max_errors": [
+        0.00015218198804057054,
+        7.610457135296849e-05
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 1,
+      "task": "connections",
+      "normalized_max_errors": [
+        1.5342346754032314e-05,
+        7.671972356162376e-06
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 2,
+      "task": "p",
+      "normalized_max_errors": [
+        0.0,
+        0.0
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 2,
+      "task": "p",
+      "normalized_max_errors": [
+        1.1102230246251565e-16
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 2,
+      "task": "inertia",
+      "normalized_max_errors": [
+        0.0009177873408562354,
+        0.00045937088968917017
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 2,
+      "task": "inertia",
+      "normalized_max_errors": [
+        0.001021838456080934
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 2,
+      "task": "integrator",
+      "normalized_max_errors": [
+        2.1159962670934237e-13,
+        4.057199021190428e-13
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 2,
+      "task": "integrator",
+      "normalized_max_errors": [
+        2.505010020180342e-05
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 2,
+      "task": "d",
+      "normalized_max_errors": [
+        0.009010041701558303,
+        0.004551182526360576
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 2,
+      "task": "d",
+      "normalized_max_errors": [
+        9.059419880941277e-15
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 2,
+      "task": "pi",
+      "normalized_max_errors": [
+        2.6652318696254397e-13,
+        5.63279270721228e-13
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 2,
+      "task": "pi",
+      "normalized_max_errors": [
+        2.4557956785303924e-05
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 2,
+      "task": "pd",
+      "normalized_max_errors": [
+        0.008190947001416598,
+        0.004137438660327755
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 2,
+      "task": "pd",
+      "normalized_max_errors": [
+        2.452710280343442e-14
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 3,
+      "task": "second",
+      "normalized_max_errors": [
+        0.0007154981026488694,
+        0.0003579787919896801
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 3,
+      "task": "zero",
+      "normalized_max_errors": [
+        0.0006485193882514168,
+        0.000324444269039485
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 3,
+      "task": "example1",
+      "normalized_max_errors": [
+        0.002527693510445457,
+        0.0012665595213085653
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 3,
+      "task": "example4",
+      "normalized_max_errors": [
+        1.6322484241658047e-05,
+        8.168593740684316e-06
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 3,
+      "task": "task1",
+      "normalized_max_errors": [
+        3.779258936613975e-05,
+        1.8896951323825756e-05
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 3,
+      "task": "task2",
+      "normalized_max_errors": [
+        0.0001275634217647592,
+        6.384737390267847e-05
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 3,
+      "task": "task3",
+      "normalized_max_errors": [
+        0.0037864710526418835,
+        0.0019007354720353385
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 3,
+      "task": "task4",
+      "normalized_max_errors": [
+        3.220378694305915e-05,
+        1.6104682834648993e-05
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 3,
+      "task": "damping_sweep",
+      "normalized_max_errors": [
+        0.002527693510445457,
+        0.0012665595213085653
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 3,
+      "task": "frequency_sweep",
+      "normalized_max_errors": [
+        0.002527693510445457,
+        0.0012665595213085653
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 4,
+      "task": "stability1",
+      "normalized_max_errors": [
+        0.002179597521592674,
+        0.0010925549044392751
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 4,
+      "task": "stability1",
+      "normalized_max_errors": [
+        0.0010751880234851955
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 4,
+      "task": "stability2",
+      "normalized_max_errors": [
+        0.00821637039357447,
+        0.004151262870998975
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 4,
+      "task": "stability2",
+      "normalized_max_errors": [
+        0.004098392897534503
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 4,
+      "task": "stability3",
+      "normalized_max_errors": [
+        0.001494357211719556,
+        0.0007482786537428231
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 4,
+      "task": "stability3",
+      "normalized_max_errors": [
+        0.0006475067747174493
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 4,
+      "task": "reduced",
+      "normalized_max_errors": [
+        0.0013423633826469075,
+        0.0006721103453690403
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 4,
+      "task": "reduced",
+      "normalized_max_errors": [
+        0.0006076073377158036
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 5,
+      "task": "bandwidth",
+      "normalized_max_errors": [
+        5.6164091846989906e-05,
+        2.844056910435329e-05
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 5,
+      "task": "bandwidth",
+      "normalized_max_errors": [
+        0.009621796447575257
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 5,
+      "task": "frequency_inertia",
+      "normalized_max_errors": [
+        0.0014127016039169327,
+        0.0007074355215246353
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 5,
+      "task": "frequency_inertia",
+      "normalized_max_errors": [
+        0.0007074355215442862
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 5,
+      "task": "frequency_second",
+      "normalized_max_errors": [
+        0.013937422810623329,
+        0.007016689918651001
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 5,
+      "task": "frequency_second",
+      "normalized_max_errors": [
+        0.007016689918744623
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 6,
+      "task": "lead1",
+      "normalized_max_errors": [
+        0.0017419373220775038,
+        0.0008723752596668135
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 6,
+      "task": "lead1",
+      "normalized_max_errors": [
+        0.0007856463059110634
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 6,
+      "task": "lead2",
+      "normalized_max_errors": [
+        0.0026592462951859986,
+        0.0013332153287458144
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 6,
+      "task": "lead2",
+      "normalized_max_errors": [
+        0.0011734345559013737
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 6,
+      "task": "lead_example1",
+      "normalized_max_errors": [
+        0.03565851448231833,
+        0.01846537477556385
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 6,
+      "task": "lead_example1",
+      "normalized_max_errors": [
+        0.0007887333953217
+      ],
+      "passed": true
+    },
+    {
+      "kind": "signal",
+      "lab": 6,
+      "task": "lead_example2",
+      "normalized_max_errors": [
+        0.0018178933189475868,
+        0.0009105254797534637
+      ],
+      "passed": true
+    },
+    {
+      "kind": "circuit",
+      "lab": 6,
+      "task": "lead_example2",
+      "normalized_max_errors": [
+        0.0008221965612431588
+      ],
+      "passed": true
+    }
+  ]
+}

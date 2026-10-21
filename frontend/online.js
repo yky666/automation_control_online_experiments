@@ -2,6 +2,8 @@ import {courseGraph,modelScript} from './blocks.js';
 export const REPOSITORY='yky666/automation_control_online_experiments';
 const base=import.meta.env?.BASE_URL||'/';
 export const assetUrl=path=>base+path.replace(/^\//,'');
+export const originalModelWarning=path=>path.replace(/^\//,'')==='sources/lab2/task3.slx'?'原始 task3 分母缺少 s，实际为比例环节，不能作为积分实验；请使用修正积分模型。':'';
+
 export const onlineUrl=(labId,taskId,mode='matlab')=>{
  const file=`matlab/online/lab${labId}_${taskId}${mode==='simulink'?'_simulink':''}.m`;
  return 'https://matlab.mathworks.com/open/github/v1?'+new URLSearchParams({repo:REPOSITORY,file});
@@ -25,7 +27,7 @@ export function makeCode(example,request,mode='matlab'){
  const input={step:'A*ones(size(t))',ramp:'A*t',sine:'A*sin(2*pi*frequency*t)',step_ramp:'A*(1+t)',polynomial:'A*(5+2*t+8*t.^2)'}[sig];
  if(!input)throw Error('输入类型无效');
  const stop=Number(request.stop_time),points=Number(request.points);
- if(!(stop>0&&stop<=120)||!Number.isInteger(points)||points<201||points>10001||!(p.A>0&&p.A<=100))throw Error('请检查仿真时长、幅值与采样点数');
+ if(!(stop>0&&stop<=120)||!Number.isInteger(points)||points<201||points>20001||!(p.A>0&&p.A<=100))throw Error('请检查仿真时长、幅值与采样点数');
  if(sig==='sine'&&!(p.frequency>0))throw Error('正弦频率必须大于零');
  const setup=`stop_time = ${scalar(stop)};\npoints = ${scalar(points)};\n${sig==='sine'&&request.auto_duration?"decay = -real(pole(sys)); decay = decay(decay > 1e-9);\nstop_time = 10/frequency;\nif ~isempty(decay), stop_time = max(stop_time,10/min(decay)); end\n":''}${sig==='sine'?"points = max(points,ceil(stop_time*frequency*60)+1);\nassert(points <= 200001,'正弦仿真采样过多，请调整频率或时长');\n":''}t = linspace(0,stop_time,points).';\nu = ${input};`;
  const body=`% Control Lab · 实际结果由你在 MATLAB / MATLAB Online 中运行得到\n% 网页中的曲线是默认参数的预计算示例，不代表当前代码已经执行\nclear; clc; close all;\n${params}\n${recipe}\n[num,den] = tfdata(sys,'v');\ndisp(sys); pole(sys), zero(sys)\n[GM,PM,Wcg,Wcp] = margin(Gopen);\nfprintf('GM=%.6g dB, PM=%.6g deg, wc=%.6g rad/s\\n',20*log10(GM),PM,Wcp);\n${setup}\nif ~isproper(sys)\n    [r,p,k] = residue(num,den); disp(r); disp(p); disp(k);\n    figure; bode(sys); grid on;\nelse\n    y = lsim(sys,u,t);\n    figure; plot(t,u,'--',t,y,'LineWidth',1.5); grid on;\n    xlabel('Time (s)'); ylabel('Amplitude'); legend('Input','Output');\n${sig==='step'?`    if isstable(sys), disp(stepinfo(y,t,dcgain(sys)*A,'SettlingTimeThreshold',${scalar(request.settling_threshold)})); end\n`:''}end\nfigure; bode(Gopen); grid on;\n${request.numerator?'':example.matlab_checks||''}`;

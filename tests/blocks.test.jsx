@@ -101,3 +101,26 @@ it('stores only student-entered measurements and computes frequency units and ph
  for(const [label,value] of [['工况说明','f=100'],['f / Hz','100'],['输入峰值 A / V','1'],['输出峰值 B / V','.5'],['滞后 Δt / ms','1']])fireEvent.change(screen.getByLabelText(label),{target:{value}});
  fireEvent.click(screen.getByRole('button',{name:'保存本行实际记录'}));const rows=JSON.parse(localStorage.getItem('course-measures-5'));expect(rows).toHaveLength(1);expect(rows[0].phase_deg).toBe(-36);expect(rows[0].gain_dB).toBeCloseTo(-6.0206);expect(rows[0].w).toBeCloseTo(200*Math.PI);
 });
+it('rebuilds actual source and transfer blocks when applying changed global settings',()=>{
+ const r=req(2,'p'),e=example(2,'p');const {rerender}=render(<BlockEditor request={r} example={e} licensed={false}/>);
+ const next={...r,input_signal:'ramp',numerator:[2],denominator:[1,1]};
+ rerender(<BlockEditor request={next} example={e} licensed={false}/>);
+ fireEvent.click(screen.getByRole('button',{name:'恢复课件结构（按当前参数重建）'}));
+ const g=JSON.parse(localStorage.getItem('control-lab-graph-2-p'));
+ expect(g.nodes.some(b=>b.type==='Ramp')).toBe(true);
+ expect(g.nodes.some(b=>b.type==='TransferFcn')).toBe(true);
+ expect(g.nodes.some(b=>b.type==='Gain')).toBe(false);
+});
+it('offers the corrected integral model instead of an Online launch of the known bad original',()=>{
+ render(<BlockEditor request={req(2,'integrator')} example={example(2,'integrator')} licensed={true} coursework={{originals:['/sources/lab2/task3.slx']}}/>);
+ expect(screen.getByText(/原始 task3 分母缺少 s/)).toBeTruthy();
+ expect(screen.getByRole('link',{name:'下载修正积分模型 .slx'}).getAttribute('href')).toBe('/models/course_lab2_integrator.slx');
+ expect(screen.queryByRole('button',{name:'在原生 Online 编辑原模型 ↗'})).toBeNull();
+});
+it('surfaces a blocked signal Online launch without claiming it opened',async()=>{
+ window.open.mockReturnValue(null);
+ render(<BlockEditor request={req(2,'pi')} example={example(2,'pi')} licensed={true}/>);
+ fireEvent.click(screen.getByRole('button',{name:'复制画布并进入 Simulink Online'}));
+ expect(screen.getByRole('status').textContent).toContain('拦截');
+ expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
+});

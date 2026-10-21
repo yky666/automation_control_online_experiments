@@ -22,5 +22,6 @@ jobs:
       - run: node tools/export_scripts.mjs
       - run: node tools/export_physical.mjs
       - run: python -m pytest tests/test_lab.py tests/test_cloud.py tests/test_online.py -q
+      - run: python tools/verify_browser_numerics.py --output runtime/browser-numerical-audit.json
       - run: npm test
       - run: npm run build

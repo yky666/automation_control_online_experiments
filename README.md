@@ -2,7 +2,7 @@
 
 六章共 38 个数值模型入口，包含完整展开的原理推导、原理图、可编辑代码和实验清单。**2.3 版可在网页直接运行信号框图和元件电路**，无需服务器或本机 MATLAB。原生 MATLAB / Simulink / Simscape 使用学校许可跳转到官方 Online；代码页的默认示例与实际仿真结果分别标记。
 
-**公网镜像：[打开 Control Lab](https://control-lab-yky666.craftychord64.chatgpt.site/)**。已发布并设为公开访问；GitHub Pages 的启用步骤见下文。[托管记录](docs/HOSTING.md)区分两种部署的当前状态。
+**公网地址：[打开 Control Lab](https://yky666.github.io/automation_control_online_experiments/)**。GitHub Pages 已发布，可直接分享给同学使用。[备用镜像](https://control-lab-yky666.craftychord64.chatgpt.site/)与[托管记录](docs/HOSTING.md)。
 
 [![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=yky666/automation_control_online_experiments&file=matlab/online/lab1_tf1.m)
 
@@ -28,9 +28,9 @@
 
 ## 无服务器发布
 
-GitHub Pages 预定地址：[Control Lab 在线实验](https://yky666.github.io/automation_control_online_experiments/)。首次启用和首次部署成功后可访问；尚未启用时，请使用上方已发布的公网镜像。访客只需浏览器，不需要下载仓库、启动本机服务或安装 MATLAB。
+GitHub Pages 正式地址：[Control Lab 在线实验](https://yky666.github.io/automation_control_online_experiments/)。已于 2026-10-21 发布，并验证匿名访问首页、课程数据、示例报告和模型下载正常。访客只需浏览器，不需要下载仓库、启动本机服务或安装 MATLAB。
 
-首次需要仓库管理员在 [Settings → Pages](https://github.com/yky666/automation_control_online_experiments/settings/pages) 将 Source 设为 **GitHub Actions**。工作流 `.github/workflows/pages.yml` 在每次推送 `main` 时自动测试、构建并发布，也可在 **Actions → Publish static course website → Run workflow** 手动发布。若首次运行时尚未启用 Pages，设置完成后重新运行失败的部署任务即可。
+仓库 Pages 的 Source 已设为 **GitHub Actions**。工作流 `.github/workflows/pages.yml` 在每次推送 `main` 时自动测试、构建并发布，也可在 **Actions → Publish static course website → Run workflow** 手动发布。
 
 工作流生成匿名默认示例、课程资源和实际验证过的模型，以仓库子路径构建，并检查全部章节、资料、示例报告、模型下载和仿真 Worker 资源是否齐全。浏览器仿真在 Web Worker 内计算；页面不调用 Python API，也不需要学生访问 localhost。MathWorks 原生运行仍由访客自己的许可授权。
 

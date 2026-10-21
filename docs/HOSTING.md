@@ -25,10 +25,12 @@
 
 ## GitHub Pages
 
-预定 URL：https://yky666.github.io/automation_control_online_experiments/
+正式 URL：https://yky666.github.io/automation_control_online_experiments/
 
-自动流程 `.github/workflows/pages.yml` 已同步，推送 `main` 会测试、以 `/automation_control_online_experiments/` 构建、检查资源并上传 Pages artifact。首次运行的 build 已成功；deploy 因仓库尚未启用 Pages 而失败，预定 URL 尚不能作为已经上线的地址。
+2026-10-21（北京时间），仓库管理员将 Source 设为 GitHub Actions 后，重新运行发布流程，build 和 deploy 均成功。[成功部署记录](https://github.com/yky666/automation_control_online_experiments/actions/runs/39592495291/attempts/2)，发布代码 `fa456f73ed997178acf7359e5c13fc7c41fa16e4`。
 
-仓库管理员在 [Settings → Pages](https://github.com/yky666/automation_control_online_experiments/settings/pages) 的 **Build and deployment → Source** 选择 **GitHub Actions**。当前连接器能提交文件和读取流水线，但没有启用 Pages 的设置接口。完成一次设置后，在 Actions 中重新运行失败的 deploy 任务，或手动运行 **Publish static course website**；以部署成功及公开地址实际可访问为上线依据。
+匿名 HTTP 检查通过：首页及 JS/CSS 资源返回 200，课程目录包含六章共 38 项任务，六章各抽查一份示例数据、示例报告、PI/双级超前原生电路模型和建模脚本均可访问。此为网络资源检查，不代表自动登录 MathWorks 或真实浏览器交互验收。
+
+自动流程 `.github/workflows/pages.yml` 在推送 `main` 后测试、以 `/automation_control_online_experiments/` 构建、检查 201 项关联资源并发布。日后无需再次设置 Pages；手动发布可运行 **Publish static course website**。
 
 GitHub Pages 不运行 Python、MATLAB 或 Simulink 服务端。浏览器数值仿真照常运行，原生代码通过访客个人 MATLAB Online 会话执行。

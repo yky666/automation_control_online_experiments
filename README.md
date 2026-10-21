@@ -26,11 +26,11 @@
 
 ## 无服务器发布
 
-本项目支持 GitHub Pages。仓库包含手动工作流 `.github/workflows/pages.yml`，不会因推送代码自动发布。
+公网地址：[Control Lab 在线实验](https://yky666.github.io/automation_control_online_experiments/)。首次启用和首次部署成功后可访问；访客只需浏览器，不需要下载仓库、启动本机服务或安装 MATLAB。
 
-在仓库 **Settings → Pages** 将 Source 设为 **GitHub Actions**，再在 **Actions → Publish static course website → Run workflow** 运行。发布成功后，地址为 `https://yky666.github.io/automation_control_online_experiments/`。这个地址只有工作流成功部署后才可访问。
+首次需要仓库管理员在 [Settings → Pages](https://github.com/yky666/automation_control_online_experiments/settings/pages) 将 Source 设为 **GitHub Actions**。工作流 `.github/workflows/pages.yml` 在每次推送 `main` 时自动测试、构建并发布，也可在 **Actions → Publish static course website → Run workflow** 手动发布。若首次运行时尚未启用 Pages，设置完成后重新运行失败的部署任务即可。
 
-工作流生成匿名默认示例、课程资源和实际验证过的模型，以仓库子路径构建。浏览器仿真在 Web Worker 内计算；页面不调用 Python API，也不需要学生访问 localhost。
+工作流生成匿名默认示例、课程资源和实际验证过的模型，以仓库子路径构建，并检查全部章节、资料、示例报告、模型下载和仿真 Worker 资源是否齐全。浏览器仿真在 Web Worker 内计算；页面不调用 Python API，也不需要学生访问 localhost。MathWorks 原生运行仍由访客自己的许可授权。
 
 ## 本机开发
 

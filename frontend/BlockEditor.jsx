@@ -24,10 +24,25 @@ export function BlockEditor({request,example,licensed,coursework,nativeModel}){
  async function open(){if(!licensed)return;try{const script=code();const page=window.open(onlineUrl(request.lab_id,request.task_id,'simulink'),'_blank');if(page)page.opener=null;try{await navigator.clipboard.writeText(script);setNotice('已复制当前画布脚本。官方打开的是默认结构，请粘贴当前脚本并 Run；生成 .slx 后可在原生编辑器继续修改。')}catch{downloadText(script,`edited_lab${request.lab_id}.m`);setNotice('剪贴板不可用，已下载当前画布脚本；请上传到 Online 运行。')}}catch(e){setNotice(e.message)}}
  const fromNodes=graph.nodes.filter(n=>portCount(n).outputs),toNodes=graph.nodes.filter(n=>portCount(n).inputs);
  const width=Math.max(1320,...graph.nodes.map(n=>n.x+180)),height=Math.max(500,...graph.nodes.map(n=>n.y+120));
- function position(event){const box=svgRef.current.getBoundingClientRect();return {x:(event.clientX-box.left)*width/box.width,y:(event.clientY-box.top)*height/box.height}}
- function startDrag(e,b){if(e.target.tagName==='circle')return;const at=position(e);drag.current={id:b.id,dx:at.x-b.x,dy:at.y-b.y,before:graph};svgRef.current.setPointerCapture?.(e.pointerId);setSelected(b.id)}
- function move(e){if(!drag.current)return;const at=position(e);setGraph(g=>({...g,nodes:g.nodes.map(b=>b.id===drag.current.id?{...b,x:Math.round(Math.max(0,Math.min(2800,at.x-drag.current.dx))),y:Math.round(Math.max(0,Math.min(1400,at.y-drag.current.dy)))}:b)}))}
- function endDrag(){if(!drag.current)return;setPast(p=>[...p.slice(-29),drag.current.before]);drag.current=null;try{localStorage.setItem(key,JSON.stringify(graph))}catch{}}
+ function position(event,frame){const {box,width,height}=frame;if(!(box.width>0&&box.height>0&&Number.isFinite(event.clientX)&&Number.isFinite(event.clientY)))return null;return {x:(event.clientX-box.left)*width/box.width,y:(event.clientY-box.top)*height/box.height}}
+ function startDrag(e,b){
+  if(e.target.tagName==='circle'||e.button!==0||drag.current)return;
+  const frame={box:svgRef.current.getBoundingClientRect(),width,height},at=position(e,frame);if(!at)return;
+  e.preventDefault();drag.current={id:b.id,pointerId:e.pointerId,dx:at.x-b.x,dy:at.y-b.y,before:graph,latest:graph,frame};
+  try{svgRef.current.setPointerCapture?.(e.pointerId)}catch{}setSelected(b.id);
+ }
+ function move(e){
+  const gesture=drag.current;if(!gesture||e.pointerId!==gesture.pointerId)return;const at=position(e,gesture.frame);if(!at)return;
+  const x=Math.round(Math.max(0,Math.min(2800,at.x-gesture.dx))),y=Math.round(Math.max(0,Math.min(1400,at.y-gesture.dy)));
+  gesture.latest={...gesture.latest,nodes:gesture.latest.nodes.map(b=>b.id===gesture.id?{...b,x,y}:b)};setGraph(gesture.latest);
+ }
+ function endDrag(e){
+  const gesture=drag.current;if(!gesture||e.pointerId!==gesture.pointerId)return;drag.current=null;
+  // React may run queued updaters after this handler. Capture values, never the cleared ref.
+  const before=gesture.before,next=gesture.latest,a=before.nodes.find(b=>b.id===gesture.id),b=next.nodes.find(b=>b.id===gesture.id);
+  if(a&&b&&(a.x!==b.x||a.y!==b.y)){setPast(p=>[...p.slice(-29),before]);setGraph(next);try{localStorage.setItem(key,JSON.stringify(next))}catch{setNotice('浏览器存储已满，请下载结构 JSON 保存')}}
+  try{if(svgRef.current?.hasPointerCapture?.(gesture.pointerId))svgRef.current.releasePointerCapture(gesture.pointerId)}catch{}
+ }
  return <section className="block-editor" aria-label="课程模块搭建">
   <div className="section-heading"><h2>课程模块搭建</h2><span className="chapter-tag">插入 · 连线 · 编辑 · 导出</span></div>
   <p className="muted">画布可编辑课程信号模块，点击“运行当前信号框图”可在浏览器直接求解；原生 Simulink 使用导出的脚本或模型。右侧参数作为脚本变量，结构以当前画布为准。网页求解器支持此处列出的线性模块，不执行任意 MATLAB 代码。</p>
@@ -37,7 +52,7 @@ export function BlockEditor({request,example,licensed,coursework,nativeModel}){
   {request.lab_id===2&&['d','pd'].includes(request.task_id)&&<p className="example-note">Scope 通道 1 是课件理想微分结构，通道 2 是带 Tf 的滤波复核结构；理想阶跃尖峰不作为有限物理峰值。</p>}
   <div className="block-palette" aria-label="模块库">{Object.keys(BLOCKS).map(type=><button key={type} onClick={()=>add(type)} disabled={graph.nodes.length>=60}>＋ {type}</button>)}</div>
   <div className="block-toolbar"><button onClick={()=>{if(!past.length)return;const next=past.at(-1);setPast(p=>p.slice(0,-1));setGraph(next);try{localStorage.setItem(key,JSON.stringify(next))}catch{}}} disabled={!past.length}>撤销</button><button onClick={()=>{commit(courseGraph(request,{...example.model,input_signal:request.input_signal||example.model.input_signal}));setSelected(null)}}>恢复课件结构</button><button onClick={()=>{commit({...graph,nodes:[],edges:[]});setSelected(null)}}>新建空白模型</button><button onClick={()=>downloadText(JSON.stringify({graph,request},null,2),`lab${request.lab_id}_structure.json`,'application/json')}>保存结构 JSON</button><button onClick={()=>fileRef.current.click()}>载入结构 JSON</button><input type="file" accept=".json" hidden ref={fileRef} onChange={async e=>{try{const file=e.target.files[0];if(!file)return;if(file.size>200000)throw Error('结构文件过大');const data=JSON.parse(await file.text()),g=data.graph||data;if(g.lab_id!==request.lab_id||g.task_id!==request.task_id)throw Error('请在对应实验任务中载入此结构');const problems=validateGraph(g).filter(x=>!x.includes('未连接'));if(problems.length)throw Error(problems.join('；'));commit(g);setNotice('已载入结构；全局参数仍以右侧设置为准。')}catch(err){setNotice(err.message)}finally{e.target.value=''}}}/></div>
-  <div className="block-canvas-scroll"><svg ref={svgRef} viewBox={`0 0 ${width} ${height}`} width={width} height={height} className="block-canvas" role="img" aria-label="可拖动模块与端口连线画布" onPointerMove={move} onPointerUp={endDrag} onPointerCancel={endDrag}>
+  <div className="block-canvas-scroll"><svg ref={svgRef} viewBox={`0 0 ${width} ${height}`} width={width} height={height} className="block-canvas" role="img" aria-label="可拖动模块与端口连线画布" onPointerMove={move} onPointerUp={endDrag} onPointerCancel={endDrag} onLostPointerCapture={endDrag}>
    <defs><marker id="course-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#427f78"/></marker></defs>
    {graph.edges.map((e,i)=>{const a=graph.nodes.find(n=>n.id===e.from),b=graph.nodes.find(n=>n.id===e.to);if(!a||!b)return null;const x1=a.x+115,y1=a.y+33,x2=b.x,y2=b.y+65*e.port/(portCount(b).inputs+1);return <path key={i} d={x2>x1?`M${x1} ${y1} H${(x1+x2)/2} V${y2} H${x2}`:`M${x1} ${y1} h35 V${Math.max(a.y,b.y)+110+i%3*15} H${x2-25} V${y2} H${x2}`} stroke="#427f78" fill="none" markerEnd="url(#course-arrow)"/>})}
    {graph.nodes.map(b=><g key={b.id} onPointerDown={e=>startDrag(e,b)} role="button" tabIndex={0} aria-label={`模块 ${b.id} ${b.type}`} onKeyDown={e=>{if(e.key==='Enter')setSelected(b.id)}} style={{cursor:'move'}}>

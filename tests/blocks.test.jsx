@@ -1,6 +1,6 @@
 import React from 'react';
 import {it,expect,vi,beforeEach,afterEach} from 'vitest';
-import {render,screen,fireEvent,cleanup} from '@testing-library/react';
+import {render,screen,fireEvent,cleanup,act} from '@testing-library/react';
 import {readFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {courseGraph,validateGraph,modelScript} from '../frontend/blocks.js';
@@ -35,6 +35,59 @@ it('adds and deletes modules, edits parameters, connects ports, and exports the 
 it('rejects occupied inputs and malformed cached models instead of crashing',()=>{
  const r=req(2,'pi'),e=example(2,'pi'),g=courseGraph(r,e.model);g.edges.push({...g.edges[0]});expect(validateGraph(g).join(' ')).toContain('已有输入连线');
  localStorage.setItem('control-lab-graph-2-pi',JSON.stringify({version:1,nodes:[{id:'x',type:'Sum'}],edges:[]}));render(<BlockEditor request={r} example={e} licensed={false}/>);expect(screen.getByRole('button',{name:'导出当前画布 .m'}).disabled).toBe(false);
+});
+it('drags repeatedly under StrictMode, saves the final position, and undoes each gesture',()=>{
+ class DragBoundary extends React.Component{
+  state={error:null};static getDerivedStateFromError(error){return {error}}
+  render(){return this.state.error?<div role="alert">{this.state.error.message}</div>:this.props.children}
+ }
+ // jsdom has no PointerEvent implementation; preserve coordinates and identity.
+ class TestPointerEvent extends MouseEvent{
+  constructor(type,init={}){super(type,init);Object.defineProperty(this,'pointerId',{value:init.pointerId??1})}
+ }
+ const oldPointer=window.PointerEvent;window.PointerEvent=TestPointerEvent;
+ const consoleError=vi.spyOn(console,'error').mockImplementation(()=>{});
+ try{
+  const r=req(1,'ode_demo'),e=example(1,'ode_demo'),initial=courseGraph(r,e.model).nodes[0];
+  render(<React.StrictMode><DragBoundary><BlockEditor request={r} example={e} licensed={false}/></DragBoundary></React.StrictMode>);
+  const canvas=screen.getByRole('img',{name:'可拖动模块与端口连线画布'});
+  canvas.getBoundingClientRect=()=>({left:0,top:0,width:1320,height:500});
+  const gesture=(x,y)=>{
+   const block=screen.getByRole('button',{name:`模块 ${initial.id} ${initial.type}`});
+   fireEvent.pointerDown(block,{clientX:Number(block.querySelector('rect').getAttribute('x'))+10,clientY:Number(block.querySelector('rect').getAttribute('y'))+10,pointerId:1,button:0});
+   fireEvent.pointerMove(canvas,{clientX:x+10,clientY:y+10,pointerId:1});
+   fireEvent.pointerUp(canvas,{clientX:x+10,clientY:y+10,pointerId:1});
+   expect(screen.queryByRole('alert')).toBeNull();
+  };
+  gesture(120,160);gesture(240,220);
+  const saved=()=>JSON.parse(localStorage.getItem('control-lab-graph-1-ode_demo')).nodes[0];
+  expect(saved()).toMatchObject({x:240,y:220});
+  fireEvent.click(screen.getByRole('button',{name:'撤销'}));expect(saved()).toMatchObject({x:120,y:160});
+  fireEvent.click(screen.getByRole('button',{name:'撤销'}));expect(saved()).toMatchObject({x:initial.x,y:initial.y});
+  // A whole gesture can be batched before React renders; persist its last move.
+  act(()=>{
+   const block=screen.getByRole('button',{name:`模块 ${initial.id} ${initial.type}`});
+   fireEvent.pointerDown(block,{clientX:initial.x+10,clientY:initial.y+10,pointerId:1,button:0});
+   fireEvent.pointerMove(canvas,{clientX:190,clientY:190,pointerId:1});
+   fireEvent.pointerMove(canvas,{clientX:310,clientY:270,pointerId:1});
+   fireEvent.pointerUp(canvas,{clientX:310,clientY:270,pointerId:1});
+  });
+  expect(screen.queryByRole('alert')).toBeNull();expect(saved()).toMatchObject({x:300,y:260});
+  fireEvent.click(screen.getByRole('button',{name:'撤销'}));expect(saved()).toMatchObject({x:initial.x,y:initial.y});
+  const block=screen.getByRole('button',{name:`模块 ${initial.id} ${initial.type}`});
+  fireEvent.pointerDown(block,{clientX:initial.x+10,clientY:initial.y+10,pointerId:1,button:0});
+  fireEvent.pointerMove(canvas,{clientX:900,clientY:900,pointerId:2});
+  fireEvent.pointerUp(canvas,{pointerId:2}); // Another pointer cannot finish this gesture.
+  fireEvent.pointerMove(canvas,{clientX:150,clientY:210,pointerId:1});
+  fireEvent.lostPointerCapture(canvas,{pointerId:1});
+  fireEvent.pointerCancel(canvas,{pointerId:1});fireEvent.pointerUp(canvas,{pointerId:1});
+  expect(screen.queryByRole('alert')).toBeNull();expect(saved()).toMatchObject({x:140,y:200});
+  fireEvent.click(screen.getByRole('button',{name:'撤销'}));expect(saved()).toMatchObject({x:initial.x,y:initial.y});
+  expect(screen.getByRole('button',{name:'撤销'}).disabled).toBe(true);
+  fireEvent.pointerDown(block,{clientX:initial.x+10,clientY:initial.y+10,pointerId:1,button:0});
+  fireEvent.pointerUp(canvas,{pointerId:1});expect(screen.getByRole('button',{name:'撤销'}).disabled).toBe(true);
+  expect(consoleError).not.toHaveBeenCalled();
+ }finally{window.PointerEvent=oldPointer}
 });
 it('maps physical values with signs and generates all required comparison cases',()=>{
  expect(rcParameters('inertia',{R1:100,R2:100,C:.1})).toEqual({K:-1,T:.01});

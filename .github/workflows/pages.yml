@@ -1,5 +1,7 @@
 name: Publish static course website
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
@@ -27,9 +29,11 @@ jobs:
       - run: python tools/export_online.py
       - run: node tools/export_scripts.mjs
       - run: node tools/export_physical.mjs
+      - run: npm test
       - run: npm run build
         env:
           VITE_BASE_PATH: /automation_control_online_experiments/
+      - run: node tools/verify_static.mjs /automation_control_online_experiments/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
@@ -40,6 +44,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Check Pages configuration
+        uses: actions/configure-pages@v6
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4

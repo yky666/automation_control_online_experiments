@@ -12,11 +12,12 @@ export function numberExpression(text,vars){
  const n=expression();if(i!==tokens.length||!Number.isFinite(n))throw Error('参数表达式无效');return n;
 }
 export function vectorExpression(text,vars){
- const str=text.trim();if(Array.isArray(vars[str]))return vars[str];
+ const str=text.trim();if(Array.isArray(vars[str]))return checkedVector(vars[str]);
  if(!str.startsWith('['))return [numberExpression(str,vars)];const end=str.indexOf(']');if(end<0)throw Error('系数向量缺少 ]');
  const values=str.slice(1,end).trim().split(/[\s,;]+/).filter(Boolean).map(v=>numberExpression(v,vars));let suffix=str.slice(end+1).trim();
- if(suffix){const op=suffix[0],v=numberExpression(suffix.slice(1),vars);if(!['*','/'].includes(op))throw Error('向量后只支持乘除标量');return values.map(x=>op==='*'?x*v:x/v)}return values;
+ if(suffix){const op=suffix[0],v=numberExpression(suffix.slice(1),vars);if(!['*','/'].includes(op))throw Error('向量后只支持乘除标量');return checkedVector(values.map(x=>op==='*'?x*v:x/v))}return checkedVector(values);
 }
+function checkedVector(values){if(!values.length||!values.every(Number.isFinite))throw Error('系数向量必须包含有限数值');return values.slice()}
 function responseAt(n,d,w){const evalp=a=>a.reduce(([r,i],c)=>[c-i*w,r*w],[0,0]);const [a,b]=evalp(n),[c,e]=evalp(d);return {mag:Math.hypot(a,b)/Math.hypot(c,e),phase:Math.atan2(b,a)-Math.atan2(e,c)}}
 export function signalVariables(request,example){
  const m=example.model,p={...m.params,...request.params,A:request.amplitude??1,pi:Math.PI},lab=request.lab_id,id=request.task_id;
@@ -45,8 +46,17 @@ export function simulateSignal(graph,request,example){
  const vars=signalVariables(request,example),nodes=graph.nodes.filter(b=>b.type!=='Scope'),outputs=Object.fromEntries(nodes.map((b,i)=>[b.id,i])),states={};let N=nodes.length;
  for(const b of nodes){if(b.type==='TransferFcn'){const n=vectorExpression(b.params.Numerator,vars),d=vectorExpression(b.params.Denominator,vars);if(!d.length||d[0]===0||n.length>d.length||d.length>13)throw Error(b.id+' 需为分母首项非零、最高 12 阶的真有理传递函数');states[b.id]={indices:Array.from({length:d.length-1},()=>N++),n,d};}else if(b.type==='Integrator')states[b.id]={indices:[N++]};}
  const signal=request.input_signal||example.model.input_signal;
- const stop=signal==='sine'&&request.auto_duration?Math.max(10/vars.frequency,example.model.input_signal==='sine'?example.model.stop_time:0):request.stop_time||5;
- const points=signal==='sine'?Math.max(request.points||1501,Math.ceil(stop*vars.frequency*60)+1):request.points||1501,dt=stop/(points-1);if(!(stop>0&&stop<=120&&Number.isInteger(points)&&points>=201&&points<=20001))throw Error('时长/采样点数无效，正弦每周期需 60 点且总数不超过 20001；请缩短时长或降低频率');
+ const stop=signal==='sine'&&request.auto_duration?Math.max(10/vars.frequency,example.model.input_signal==='sine'?example.model.stop_time:0):request.stop_time??5;
+ const points=signal==='sine'?Math.max(request.points??1501,Math.ceil(stop*vars.frequency*60)+1):request.points??1501,dt=stop/(points-1);if(!(stop>0&&stop<=120&&Number.isInteger(points)&&points>=201&&points<=20001))throw Error('时长/采样点数无效，正弦每周期需 60 点且总数不超过 20001；请缩短时长或降低频率');
+ const sources=nodes.filter(b=>portCount(b).inputs===0);
+ for(const b of sources){
+  if(b.type==='SineWave'){
+   if(numberExpression(b.params.SampleTime,vars)!==0)throw Error(b.id+'：浏览器仅支持连续正弦源，SampleTime 必须为 0');
+   const hz=Math.abs(numberExpression(b.params.Frequency,vars))/(2*Math.PI);
+   if(hz*dt>1/60+1e-12)throw Error(b.id+'：正弦采样不足，每周期至少需要 60 点；请增加采样点或缩短时长');
+  }
+  if(b.type==='FromWorkspace'&&b.params.VariableName.trim()!=='web_input')throw Error(b.id+'：浏览器仅提供 web_input 工作区输入');
+ }
  const input=b=>outputs[graph.edges.find(e=>e.to===b.id&&e.port===1)?.from],mat=Array.from({length:N},()=>Array(N).fill(0)),dynamic=[];
  for(const b of nodes){const k=outputs[b.id],j=input(b),p=b.params;mat[k][k]=1;
   if(b.type==='Gain')mat[k][j]-=numberExpression(p.Gain,vars);
@@ -59,7 +69,9 @@ export function simulateSignal(graph,request,example){
   }
  }
  const initialMatrix=mat.map(r=>r.slice());for(const item of dynamic){initialMatrix[item.row].fill(0);initialMatrix[item.row][item.row]=1}
- const solve=factor(mat),initialSolve=factor(initialMatrix),scope=graph.nodes.find(b=>b.type==='Scope'),channels=graph.edges.filter(e=>e.to===scope.id).sort((a,b)=>a.port-b.port),time=[],series=channels.map(()=>[]);let previous=new Float64Array(N);
+ const solve=factor(mat),initialSolve=factor(initialMatrix),scopes=graph.nodes.filter(b=>b.type==='Scope');
+ const channels=scopes.flatMap(scope=>graph.edges.filter(e=>e.to===scope.id).sort((a,b)=>a.port-b.port).map(e=>({...e,label:scopes.length===1?'Scope '+e.port:scope.id+' / '+e.port})));
+ const time=[],series=channels.map(()=>[]),sourceTraces=Object.fromEntries(sources.map(b=>[b.id,[]]));let previous=new Float64Array(N);
  const u=t=>vars.A*(signal==='sine'?Math.sin(2*Math.PI*vars.frequency*t):signal==='ramp'?t:signal==='step_ramp'?1+t:signal==='polynomial'?5+2*t+8*t*t:1);
  for(const item of dynamic)if(item.kind==='state')previous[item.row]=item.initial;
  for(let i=0;i<points;i++){const t=i*dt,rhs=new Float64Array(N);for(const b of nodes){const k=outputs[b.id],p=b.params;
@@ -68,6 +80,6 @@ export function simulateSignal(graph,request,example){
   else if(b.type==='Ramp')rhs[k]=numberExpression(p.InitialOutput,vars)+Math.max(0,t-numberExpression(p.start,vars))*numberExpression(p.slope,vars);
   else if(b.type==='FromWorkspace')rhs[k]=u(t);
  }
- for(const item of dynamic)rhs[item.row]=item.kind==='derivative'?(i===0?0:-previous[item.input]/dt):previous[item.row];const x=(i===0?initialSolve:solve)(rhs);if(Array.from(x).some(v=>!Number.isFinite(v)||Math.abs(v)>1e12))throw Error('信号模型响应发散或超出范围');previous=x;time.push(t);channels.forEach((e,j)=>series[j].push(x[outputs[e.from]]));}
- return {time,input:time.map(u),output:series[0],traces:Object.fromEntries(series.map((y,i)=>['Scope '+(i+1),y])),method:'浏览器信号框图 · 隐式欧拉',createdAt:new Date().toISOString(),engine:'browser-signal',graph:structuredClone(graph),request:structuredClone(request)};
+ for(const item of dynamic)rhs[item.row]=item.kind==='derivative'?(i===0?0:-previous[item.input]/dt):previous[item.row];const x=(i===0?initialSolve:solve)(rhs);if(Array.from(x).some(v=>!Number.isFinite(v)||Math.abs(v)>1e12))throw Error('信号模型响应发散或超出范围');previous=x;time.push(t);channels.forEach((e,j)=>series[j].push(x[outputs[e.from]]));sources.forEach(b=>sourceTraces[b.id].push(x[outputs[b.id]]));}
+ return {time,input:sources.length?sourceTraces[sources[0].id]:time.map(()=>0),inputLabel:sources.length?sources[0].id+' · '+sources[0].type:'无外部激励（零参考线）',sourceTraces,channels:channels.map(e=>({label:e.label,scope:e.to,port:e.port,from:e.from})),output:series[0],traces:Object.fromEntries(series.map((y,i)=>[channels[i].label,y])),method:'浏览器信号框图 · 隐式欧拉',createdAt:new Date().toISOString(),engine:'browser-signal',graph:structuredClone(graph),request:structuredClone(request)};
 }

@@ -4,16 +4,16 @@ import {physicalScript} from './physical-export.js';
 import {signalVariables} from './signal-solver.js';
 import {assetUrl,downloadText,onlineFileUrl} from './online.js';
 
-export function Waveform({result,trace='output'}){
+export function Waveform({result,trace='output',signal=false}){
  const [cursor,setCursor]=useState(null);if(!result)return null;
  const y=result.traces?.[trace]||result.output,x=result.time,values=[...y,...result.input],lo=values.reduce((a,v)=>Math.min(a,v),Infinity),hi=values.reduce((a,v)=>Math.max(a,v),-Infinity),span=hi-lo||1;
  const px=t=>55+700*(t-x[0])/(x.at(-1)-x[0]||1),py=v=>205-160*(v-lo)/span;
  const path=data=>{const stride=Math.max(1,Math.ceil(data.length/12000));return data.flatMap((v,i)=>i%stride===0||i===data.length-1?[(i?'L':'M')+px(x[i]).toFixed(2)+' '+py(v).toFixed(2)]:[]).join(' ')};
- return <div className="waveform"><svg viewBox="0 0 800 250" role="img" aria-label="本次实际求解的输入和输出电压曲线" onMouseLeave={()=>setCursor(null)} onMouseMove={e=>{const b=e.currentTarget.getBoundingClientRect(),p=(e.clientX-b.left)/b.width*800;setCursor(Math.max(0,Math.min(x.length-1,Math.round((p-55)/700*(x.length-1)))));}}>
+ return <div className="waveform"><svg viewBox="0 0 800 250" role="img" aria-label={signal?'本次实际求解的输入和输出信号曲线':'本次实际求解的输入和输出电压曲线'} onMouseLeave={()=>setCursor(null)} onMouseMove={e=>{const b=e.currentTarget.getBoundingClientRect(),p=(e.clientX-b.left)/b.width*800;setCursor(Math.max(0,Math.min(x.length-1,Math.round((p-55)/700*(x.length-1)))));}}>
   {[0,1,2,3,4].map(i=><g key={i}><path d={`M55 ${45+i*40}H755`} stroke="#e5eeed"/><text x="48" y={49+i*40} textAnchor="end">{(hi-i*span/4).toPrecision(3)}</text><text x={55+i*175} y="225" textAnchor="middle">{(x[0]+(x.at(-1)-x[0])*i/4).toPrecision(3)}</text></g>)}
   <path d="M55 35V205H760" stroke="#9cafad" fill="none"/><path d={path(result.input)} stroke="#bc895a" strokeDasharray="5 4" fill="none"/><path d={path(y)} stroke="#247d78" strokeWidth="1.7" fill="none"/>
-  <text x="12" y="20">电压 / V</text><text x="705" y="247">时间 / s</text>{cursor!=null&&<path d={`M${px(x[cursor])} 35V205`} stroke="#8b9da0" strokeDasharray="3 3"/>}
- </svg><p className="tiny-note">橙线：输入 · 绿线：{trace==='output'?'输出':trace} {cursor!=null&&`· t=${x[cursor].toPrecision(5)} s，V=${y[cursor].toPrecision(6)} V`}</p></div>;
+  <text x="12" y="20">{signal?'信号幅值':'电压 / V'}</text><text x="705" y="247">时间 / s</text>{cursor!=null&&<path d={`M${px(x[cursor])} 35V205`} stroke="#8b9da0" strokeDasharray="3 3"/>}
+ </svg><p className="tiny-note">橙线：{signal?(result.inputLabel||'输入'):'输入'} · 绿线：{trace==='output'?'输出':trace} {cursor!=null&&`· t=${x[cursor].toPrecision(5)} s，${signal?'幅值':'V'}=${y[cursor].toPrecision(6)}${signal?'':' V'}`}</p></div>;
 }
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function circuitReport(result,student,analysis){

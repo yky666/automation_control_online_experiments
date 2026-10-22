@@ -1,3 +1,4 @@
+import {captureRun} from './personal-report.js';
 import React,{useState,useMemo,useRef,useEffect} from 'react';
 import {BLOCKS,newBlock,portCount,courseGraph,validateGraph,modelScript} from './blocks.js';
 import {makeCode,downloadText,onlineUrl,onlineFileUrl,assetUrl,originalModelWarning} from './online.js';
@@ -13,7 +14,7 @@ export function BlockEditor({request,example,licensed,coursework,nativeModel}){
  const [running,setRunning]=useState(false),[simulation,setSimulation]=useState(null),[trace,setTrace]=useState('output');
  const [reportStudent,setReportStudent]=useState(''),[reportAnalysis,setReportAnalysis]=useState('');
  useEffect(()=>()=>{worker.current?.terminate();clearTimeout(runTimer.current)},[]);
- function simulate(){setRunning(true);setNotice('正在求解当前画布…');worker.current?.terminate();const w=new Worker(new URL('./signal.worker.js',import.meta.url),{type:'module'});worker.current=w;const end=()=>{w.terminate();clearTimeout(runTimer.current);setRunning(false)};w.onmessage=e=>{end();if(e.data.error)setNotice(e.data.error);else{setSimulation(e.data.result);setTrace('output');setNotice('已按当前画布和右侧参数完成信号仿真。浏览器数值结果与原生 Simulink 结果分别标记。')}};w.onerror=e=>{end();setNotice(e.message)};runTimer.current=setTimeout(()=>{end();setNotice('仿真超时，请检查反馈或减少采样点')},45000);w.postMessage({graph,request,example})}
+ function simulate(){setRunning(true);setNotice('正在求解当前画布…');worker.current?.terminate();const w=new Worker(new URL('./signal.worker.js',import.meta.url),{type:'module'});worker.current=w;const end=()=>{w.terminate();clearTimeout(runTimer.current);setRunning(false)};w.onmessage=e=>{end();if(e.data.error)setNotice(e.data.error);else{setSimulation(e.data.result);captureRun(e.data.result,`实验 ${request.lab_id} · ${request.task_id}`);setTrace('output');setNotice('已按当前画布和右侧参数完成信号仿真。浏览器数值结果与原生 Simulink 结果分别标记。')}};w.onerror=e=>{end();setNotice(e.message)};runTimer.current=setTimeout(()=>{end();setNotice('仿真超时，请检查反馈或减少采样点')},45000);w.postMessage({graph,request,example})}
  const errors=useMemo(()=>validateGraph(graph),[graph]);const block=graph.nodes.find(b=>b.id===selected);
  function commit(next){setPast(p=>[...p.slice(-29),graph]);setGraph(next);try{localStorage.setItem(key,JSON.stringify(next))}catch{setNotice('浏览器存储已满，请下载结构 JSON 保存')}setNotice('')}
  function add(type){const ids=new Set(graph.nodes.map(n=>n.id));let i=1;while(ids.has('b'+i))i++;const next=newBlock(type,'b'+i,80+(graph.nodes.length%5)*220,430+Math.floor(graph.nodes.length/5)%4*150);commit({...graph,nodes:[...graph.nodes,next]});setSelected(next.id)}
